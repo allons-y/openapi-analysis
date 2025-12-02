@@ -37,7 +37,11 @@ func (isn *InlineSchemaNamer) Name(key string, schema *spec.Schema, aschema *Ana
 
 		// create unique name
 		mangle := mangler(isn.opts)
-		newName, isOAIGen := uniqifyName(isn.Spec.Definitions, mangle(name))
+		var schemas map[string]spec.Schema
+		if isn.Spec.Components != nil {
+			schemas = isn.Spec.Components.Schemas
+		}
+		newName, isOAIGen := uniqifyName(schemas, mangle(name))
 
 		// clone schema
 		sch := schutils.Clone(schema)
@@ -109,19 +113,19 @@ func (isn *InlineSchemaNamer) Name(key string, schema *spec.Schema, aschema *Ana
 }
 
 // uniqifyName yields a unique name for a definition
-func uniqifyName(definitions spec.Definitions, name string) (string, bool) {
+func uniqifyName(schemas map[string]spec.Schema, name string) (string, bool) {
 	isOAIGen := false
 	if name == "" {
 		name = "oaiGen"
 		isOAIGen = true
 	}
 
-	if len(definitions) == 0 {
+	if len(schemas) == 0 {
 		return name, isOAIGen
 	}
 
 	unq := true
-	for k := range definitions {
+	for k := range schemas {
 		if strings.EqualFold(k, name) {
 			unq = false
 
@@ -137,12 +141,12 @@ func uniqifyName(definitions spec.Definitions, name string) (string, bool) {
 	isOAIGen = true
 	var idx int
 	unique := name
-	_, known := definitions[unique]
+	_, known := schemas[unique]
 
 	for known {
 		idx++
 		unique = fmt.Sprintf("%s%d", name, idx)
-		_, known = definitions[unique]
+		_, known = schemas[unique]
 	}
 
 	return unique, isOAIGen

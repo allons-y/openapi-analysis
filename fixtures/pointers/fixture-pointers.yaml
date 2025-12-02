@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   version: '0.1.0'
   title: JSON pointers
@@ -13,7 +13,7 @@ parameters:
     name: some
     in: body
     schema:
-      $ref: '#/responses/notFound/schema'
+      $ref: '#/components/responses/notFound/schema'
   remoteParam:
     name: some
     in: body
@@ -24,11 +24,11 @@ responses:
   notFound:
     description: 'Not Found'
     schema:
-      $ref: '#/definitions/notFound'
+      $ref: '#/components/schemas/notFound'
   funnyResponse:
     description: ok
     schema:
-      $ref: '#/parameters/bodyParam/schema'
+      $ref: '#/components/parameters/bodyParam/schema'
   remoteResponse:
     description: ok
     schema:
@@ -40,50 +40,50 @@ responses:
 paths:
   /some/where:
     parameters:
-    - $ref: '#/parameters/someParam'
+    - $ref: '#/components/parameters/someParam'
     get:
       parameters:
-      - $ref: '#/parameters/bodyParam' 
+      - $ref: '#/components/parameters/bodyParam' 
       - name: other
         in: query
         type: string
       responses:
         default:
-          $ref: '#/responses/notFound'
+          $ref: '#/components/responses/notFound'
         404:
           description: ok
           schema:
-            $ref: '#/definitions/myResponse'
+            $ref: '#/components/schemas/myResponse'
         200:
           description: 'RecordHolder'
           schema:
             type: object
             properties:
               prop0:
-                $ref: '#/definitions/myBody'
+                $ref: '#/components/schemas/myBody'
     post:
       responses:
         default:
           description: default
           schema:
-            $ref: '#/definitions/myDefaultResponse/properties/zzz'
+            $ref: '#/components/schemas/myDefaultResponse/properties/zzz'
         203:
           description: funny
           schema:
-            $ref: '#/responses/funnyResponse/schema'
+            $ref: '#/components/responses/funnyResponse/schema'
         204:
-          $ref: '#/responses/funnyResponse'
+          $ref: '#/components/responses/funnyResponse'
   /some/where/else:
     get:
       responses:
         default:
           description: default
           schema:
-            $ref: '#/definitions/notFound'
+            $ref: '#/components/schemas/notFound'
         200:
           description: ok
           schema:
-            $ref: '#/definitions/myDefaultResponse'
+            $ref: '#/components/schemas/myDefaultResponse'
   /with/slice/container:
     get:
       responses:
@@ -93,7 +93,7 @@ paths:
             allOf:
             - $ref: 'remote.yaml#/remotes/u64'
             - $ref: 'remote.yaml#/remotes/u32'
-            - $ref: '#/definitions/myBody/properties/prop3'
+            - $ref: '#/components/schemas/myBody/properties/prop3'
   /with/tuple/container:
     get:
       responses:
@@ -102,8 +102,8 @@ paths:
           schema:
             type: array
             items:
-            - $ref: '#/definitions/myBody/properties/prop2'
-            - $ref: '#/definitions/myBody/properties/prop3'
+            - $ref: '#/components/schemas/myBody/properties/prop2'
+            - $ref: '#/components/schemas/myBody/properties/prop3'
             - $ref: 'remote.yaml#/remotes/i32'
   /with/array/container:
     get:
@@ -111,13 +111,13 @@ paths:
         200:
           description: ok
           schema:
-            $ref: '#/definitions/anArray'
+            $ref: '#/components/schemas/anArray'
         default:
           description: default
           schema:
             type: array
             items:
-              $ref: '#/definitions/anArray/items'
+              $ref: '#/components/schemas/anArray/items'
   /with/boolable/container:
     get:
       responses:
@@ -129,13 +129,13 @@ paths:
               - type: integer
               - type: string
             additionalItems:
-              $ref: '#/definitions/myBody/properties/prop3'
+              $ref: '#/components/schemas/myBody/properties/prop3'
         default:
           description: default
           schema:
             type: object
             additionalProperties:
-              $ref: '#/definitions/myBody/properties/prop3'
+              $ref: '#/components/schemas/myBody/properties/prop3'
   /with/ZcomesFirstInOrder/container:
     get:
       responses:
@@ -147,11 +147,11 @@ paths:
               - type: integer
               - type: string
             additionalItems:
-              $ref: '#/definitions/myBody/properties/prop3'
+              $ref: '#/components/schemas/myBody/properties/prop3'
         203:
           description: ok
           schema:
-            $ref: '#/definitions/anExtensible/additionalProperties'
+            $ref: '#/components/schemas/anExtensible/additionalProperties'
         204:
           description: ok
           schema:
@@ -159,7 +159,7 @@ paths:
             additionalProperties:
               type: object
               additionalProperties:
-                $ref: '#/definitions/anExtensible/additionalProperties'
+                $ref: '#/components/schemas/anExtensible/additionalProperties'
 definitions:
   anExtensible:
     type: object
@@ -177,7 +177,7 @@ definitions:
     type: object
     properties:
       prop1:
-        $ref: '#/definitions/myDefaultResponse/properties/zzz'
+        $ref: '#/components/schemas/myDefaultResponse/properties/zzz'
   myDefaultResponse:
     type: object
     properties:
@@ -186,11 +186,11 @@ definitions:
   myResponse:
     type: object
     additionalProperties:
-      $ref: '#/definitions/notFound/properties/prop1'
+      $ref: '#/components/schemas/notFound/properties/prop1'
   myBody:
     type: object
     properties: 
       prop2: 
         type: integer
       prop3:
-        $ref: '#/definitions/myDefaultResponse/properties/zzz'
+        $ref: '#/components/schemas/myDefaultResponse/properties/zzz'

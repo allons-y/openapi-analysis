@@ -6,28 +6,24 @@ package analysis
 import (
 	"fmt"
 	"reflect"
-	"slices"
 
 	"github.com/go-openapi/spec"
 )
 
-// Mixin modifies the primary swagger spec by adding the paths and
-// definitions from the mixin specs. Top level parameters and
-// responses from the mixins are also carried over. Operation id
-// collisions are avoided by appending "Mixin<N>" but only if
-// needed.
+// Mixin modifies the primary OpenAPI spec by adding the paths and
+// components from the mixin specs. Components (schemas, parameters, responses,
+// and security schemes) from the mixins are also carried over. Operation id
+// collisions are avoided by appending "Mixin<N>" but only if needed.
 //
-// The following parts of primary are subject to merge, filling empty details
+// The following parts of primary are subject to merge, filling empty details:
 //   - Info
-//   - BasePath
-//   - Host
 //   - ExternalDocs
 //
 // Consider calling FixEmptyResponseDescriptions() on the modified primary
 // if you read them from storage and they are valid to start with.
 //
-// Entries in "paths", "definitions", "parameters" and "responses" are
-// added to the primary in the order of the given mixins. If the entry
+// Entries in "paths" and "components" (schemas, parameters, responses, securitySchemes)
+// are added to the primary in the order of the given mixins. If the entry
 // already exists in primary it is skipped with a warning message.
 //
 // The count of skipped entries (from collisions) is returned so any
@@ -35,12 +31,9 @@ import (
 // scripts. Carefully review the collisions before accepting them;
 // consider renaming things if possible.
 //
-// No key normalization takes place (paths, type defs,
-// etc). Ensure they are canonical if your downstream tools do
-// key normalization of any form.
-//
-// Merging schemes (http, https), and consumers/producers do not account for
-// collisions.
+// No key normalization takes place (paths, type defs, etc).
+// Ensure they are canonical if your downstream tools do key normalization
+// of any form.
 func Mixin(primary *spec.Swagger, mixins ...*spec.Swagger) []string {
 	skipped := make([]string, 0, len(mixins))
 	opIDs := getOpIDs(primary)
@@ -49,13 +42,7 @@ func Mixin(primary *spec.Swagger, mixins ...*spec.Swagger) []string {
 	for i, m := range mixins {
 		skipped = append(skipped, mergeSwaggerProps(primary, m)...)
 
-		skipped = append(skipped, mergeConsumes(primary, m)...)
-
-		skipped = append(skipped, mergeProduces(primary, m)...)
-
 		skipped = append(skipped, mergeTags(primary, m)...)
-
-		skipped = append(skipped, mergeSchemes(primary, m)...)
 
 		skipped = append(skipped, mergeSecurityDefinitions(primary, m)...)
 
@@ -114,16 +101,27 @@ func appendOp(ops []*spec.Operation, op *spec.Operation) []*spec.Operation {
 }
 
 func mergeSecurityDefinitions(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
-	for k, v := range m.SecurityDefinitions {
-		if _, exists := primary.SecurityDefinitions[k]; exists {
+	if m.Components == nil || len(m.Components.SecuritySchemes) == 0 {
+		return
+	}
+
+	if primary.Components == nil {
+		primary.Components = &spec.Components{}
+	}
+	if primary.Components.SecuritySchemes == nil {
+		primary.Components.SecuritySchemes = make(map[string]spec.SecurityScheme)
+	}
+
+	for k, v := range m.Components.SecuritySchemes {
+		if _, exists := primary.Components.SecuritySchemes[k]; exists {
 			warn := fmt.Sprintf(
-				"SecurityDefinitions entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
+				"SecuritySchemes entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
 			skipped = append(skipped, warn)
 
 			continue
 		}
 
-		primary.SecurityDefinitions[k] = v
+		primary.Components.SecuritySchemes[k] = v
 	}
 
 	return
@@ -154,16 +152,27 @@ func mergeSecurityRequirements(primary *spec.Swagger, m *spec.Swagger) (skipped 
 }
 
 func mergeDefinitions(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
-	for k, v := range m.Definitions {
+	if m.Components == nil || len(m.Components.Schemas) == 0 {
+		return
+	}
+
+	if primary.Components == nil {
+		primary.Components = &spec.Components{}
+	}
+	if primary.Components.Schemas == nil {
+		primary.Components.Schemas = make(map[string]spec.Schema)
+	}
+
+	for k, v := range m.Components.Schemas {
 		// assume name collisions represent IDENTICAL type. careful.
-		if _, exists := primary.Definitions[k]; exists {
+		if _, exists := primary.Components.Schemas[k]; exists {
 			warn := fmt.Sprintf(
-				"definitions entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
+				"schemas entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
 			skipped = append(skipped, warn)
 
 			continue
 		}
-		primary.Definitions[k] = v
+		primary.Components.Schemas[k] = v
 	}
 
 	return
@@ -201,68 +210,63 @@ func mergePaths(primary *spec.Swagger, m *spec.Swagger, opIDs map[string]bool, m
 }
 
 func mergeParameters(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
-	for k, v := range m.Parameters {
+	if m.Components == nil || len(m.Components.Parameters) == 0 {
+		return
+	}
+
+	if primary.Components == nil {
+		primary.Components = &spec.Components{}
+	}
+	if primary.Components.Parameters == nil {
+		primary.Components.Parameters = make(map[string]spec.Parameter)
+	}
+
+	for k, v := range m.Components.Parameters {
 		// could try to rename on conflict but would
 		// have to fix $refs in the mixin. Complain
 		// for now
-		if _, exists := primary.Parameters[k]; exists {
+		if _, exists := primary.Components.Parameters[k]; exists {
 			warn := fmt.Sprintf(
-				"top level parameters entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
+				"components parameters entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
 			skipped = append(skipped, warn)
 
 			continue
 		}
-		primary.Parameters[k] = v
+		primary.Components.Parameters[k] = v
 	}
 
 	return
 }
 
 func mergeResponses(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
-	for k, v := range m.Responses {
+	if m.Components == nil || len(m.Components.Responses) == 0 {
+		return
+	}
+
+	if primary.Components == nil {
+		primary.Components = &spec.Components{}
+	}
+	if primary.Components.Responses == nil {
+		primary.Components.Responses = make(map[string]spec.Response)
+	}
+
+	for k, v := range m.Components.Responses {
 		// could try to rename on conflict but would
 		// have to fix $refs in the mixin. Complain
 		// for now
-		if _, exists := primary.Responses[k]; exists {
+		if _, exists := primary.Components.Responses[k]; exists {
 			warn := fmt.Sprintf(
-				"top level responses entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
+				"components responses entry '%v' already exists in primary or higher priority mixin, skipping\n", k)
 			skipped = append(skipped, warn)
 
 			continue
 		}
-		primary.Responses[k] = v
+		primary.Components.Responses[k] = v
 	}
 
 	return skipped
 }
 
-func mergeConsumes(primary *spec.Swagger, m *spec.Swagger) []string {
-	for _, v := range m.Consumes {
-		found := slices.Contains(primary.Consumes, v)
-
-		if found {
-			// no warning here: we just skip it
-			continue
-		}
-		primary.Consumes = append(primary.Consumes, v)
-	}
-
-	return []string{}
-}
-
-func mergeProduces(primary *spec.Swagger, m *spec.Swagger) []string {
-	for _, v := range m.Produces {
-		found := slices.Contains(primary.Produces, v)
-
-		if found {
-			// no warning here: we just skip it
-			continue
-		}
-		primary.Produces = append(primary.Produces, v)
-	}
-
-	return []string{}
-}
 
 func mergeTags(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
 	for _, v := range m.Tags {
@@ -291,33 +295,10 @@ func mergeTags(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
 	return
 }
 
-func mergeSchemes(primary *spec.Swagger, m *spec.Swagger) []string {
-	for _, v := range m.Schemes {
-		found := slices.Contains(primary.Schemes, v)
-
-		if found {
-			// no warning here: we just skip it
-			continue
-		}
-		primary.Schemes = append(primary.Schemes, v)
-	}
-
-	return []string{}
-}
-
 func mergeSwaggerProps(primary *spec.Swagger, m *spec.Swagger) []string {
 	var skipped, skippedInfo, skippedDocs []string
 
 	primary.Extensions, skipped = mergeExtensions(primary.Extensions, m.Extensions)
-
-	// merging details in swagger top properties
-	if primary.Host == "" {
-		primary.Host = m.Host
-	}
-
-	if primary.BasePath == "" {
-		primary.BasePath = m.BasePath
-	}
 
 	if primary.Info == nil {
 		primary.Info = m.Info
@@ -438,28 +419,20 @@ func mergeExtensions(primary spec.Extensions, m spec.Extensions) (result spec.Ex
 }
 
 func initPrimary(primary *spec.Swagger) {
-	if primary.SecurityDefinitions == nil {
-		primary.SecurityDefinitions = make(map[string]*spec.SecurityScheme)
+	if primary.Components == nil {
+		primary.Components = &spec.Components{}
+	}
+
+	if primary.Components.SecuritySchemes == nil {
+		primary.Components.SecuritySchemes = make(map[string]spec.SecurityScheme)
 	}
 
 	if primary.Security == nil {
 		primary.Security = make([]map[string][]string, 0, allocSmallMap)
 	}
 
-	if primary.Produces == nil {
-		primary.Produces = make([]string, 0, allocSmallMap)
-	}
-
-	if primary.Consumes == nil {
-		primary.Consumes = make([]string, 0, allocSmallMap)
-	}
-
 	if primary.Tags == nil {
 		primary.Tags = make([]spec.Tag, 0, allocSmallMap)
-	}
-
-	if primary.Schemes == nil {
-		primary.Schemes = make([]string, 0, allocSmallMap)
 	}
 
 	if primary.Paths == nil {
@@ -470,15 +443,15 @@ func initPrimary(primary *spec.Swagger) {
 		primary.Paths.Paths = make(map[string]spec.PathItem)
 	}
 
-	if primary.Definitions == nil {
-		primary.Definitions = make(spec.Definitions)
+	if primary.Components.Schemas == nil {
+		primary.Components.Schemas = make(map[string]spec.Schema)
 	}
 
-	if primary.Parameters == nil {
-		primary.Parameters = make(map[string]spec.Parameter)
+	if primary.Components.Parameters == nil {
+		primary.Components.Parameters = make(map[string]spec.Parameter)
 	}
 
-	if primary.Responses == nil {
-		primary.Responses = make(map[string]spec.Response)
+	if primary.Components.Responses == nil {
+		primary.Components.Responses = make(map[string]spec.Response)
 	}
 }

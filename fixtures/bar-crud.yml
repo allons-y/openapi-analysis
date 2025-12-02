@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   title: bar CRUD API
   version: 4.2.0
@@ -19,7 +19,7 @@ paths:
         '200':
           description: OK
           schema:
-            $ref: "#/definitions/bar"
+            $ref: "#/components/schemas/bar"
   /bars:
     post:
       operationId: create
@@ -28,35 +28,35 @@ paths:
         - name: info
           in: body
           schema:
-            $ref: "#/definitions/bar"
+            $ref: "#/components/schemas/bar"
       responses:
         '201':
           description: created
           schema:
-            $ref: "#/definitions/barId"
+            $ref: "#/components/schemas/barId"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
   /bars/{barid}:
     get:
       operationId: get
       summary: Get a bar by id
       parameters:
-        - $ref: "#/parameters/barid"
+        - $ref: "#/components/parameters/barid"
       responses:
         '200':
           description: OK
           schema:
-            $ref: "#/definitions/bar"
+            $ref: "#/components/schemas/bar"
         '401':
-          $ref: "#/responses/401"
+          $ref: "#/components/responses/401"
         '404':
-          $ref: "#/responses/404"
+          $ref: "#/components/responses/404"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
     delete:
       operationId: delete
       summary: delete a bar by id
@@ -71,15 +71,15 @@ paths:
         '401':
           description: unauthorized
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         '404':
           description: resource not found
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
     post:
       operationId: update
       summary: update a bar by id
@@ -91,22 +91,22 @@ paths:
         - name: info
           in: body
           schema:
-            $ref: "#/definitions/bar"
+            $ref: "#/components/schemas/bar"
       responses:
         '200':
           description: OK
         '401':
           description: unauthorized
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         '404':
           description: resource not found
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
 
 definitions:
   common:
@@ -173,8 +173,8 @@ responses:
   401:
     description: bar unauthorized
     schema:
-      $ref: "#/definitions/error"
+      $ref: "#/components/schemas/error"
   404:
     description: bar resource not found
     schema:
-      $ref: "#/definitions/error"
+      $ref: "#/components/schemas/error"

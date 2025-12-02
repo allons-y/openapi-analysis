@@ -1,4 +1,4 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   title: The Giant Swarm API v4
   description: |
@@ -128,15 +128,15 @@ paths:
         }
         ```
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Information
           schema:
-            $ref: "./definitions.yaml#/definitions/V4InfoResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4InfoResponse"
           examples:
             application/json:
               {
@@ -159,11 +159,11 @@ paths:
                 }
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/auth-tokens/:
     post:
@@ -174,15 +174,15 @@ paths:
       description: |
         Creates a Auth Token for a given user. Must authenticate with email and password.
       parameters:
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
         - name: body
           in: body
           required: true
           description: Create Auth Token Request
           schema:
-            $ref: 'definitions.yaml#/definitions/V4CreateAuthTokenRequest'
+            $ref: 'definitions.yaml#/components/schemas/V4CreateAuthTokenRequest'
           x-examples:
             application/json:
               {
@@ -193,14 +193,14 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "./definitions.yaml#/definitions/V4CreateAuthTokenResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4CreateAuthTokenResponse"
           examples:
             application/json:
               {
                 "auth_token": "e5239484-2299-41df-b901-d0568db7e3f9"
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
 
     delete:
       operationId: deleteAuthToken
@@ -210,15 +210,15 @@ paths:
       description: |
         Deletes the authentication token provided in the Authorization header. This effectively logs you out.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Success
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -226,7 +226,7 @@ paths:
                 "message": "The authentication token has been succesfully deleted."
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
 
   /v4/users/:
     get:
@@ -237,17 +237,17 @@ paths:
       description: |
         Returns a list of all users in the system. Currently this endpoint is only available to users with admin permissions.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Success
           schema:
             type: array
             items:
-              $ref: "./definitions.yaml#/definitions/V4UserListItem"
+              $ref: "./definitions.yaml#/components/schemas/V4UserListItem"
           examples:
             application/json:
               [
@@ -256,11 +256,11 @@ paths:
                 {"email": "charles@example.com", "created": "2017-03-15T13:00:00Z", "expiry": "2021-01-15T00:00:00Z"}
               ]
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/user/:
     get:
@@ -271,15 +271,15 @@ paths:
       description: |
         Returns details about the currently authenticated user
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Success
           schema:
-            $ref: "./definitions.yaml#/definitions/V4UserListItem"
+            $ref: "./definitions.yaml#/components/schemas/V4UserListItem"
           examples:
             application/json:
              {"email": "andy@example.com", "created": "2017-01-15T12:00:00Z", "expiry": "2019-01-15T00:00:00Z"}
@@ -299,21 +299,21 @@ paths:
                 type: string
                 description: The date and time when this account will expire
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/users/{email}/:
     get:
       operationId: getUser
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/UserEmailPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/UserEmailPathParameter"
       tags:
         - users
       summary: Get user
@@ -323,16 +323,16 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "./definitions.yaml#/definitions/V4UserListItem"
+            $ref: "./definitions.yaml#/components/schemas/V4UserListItem"
           examples:
             application/json:
               {"email": "andy@example.com", "created": "2017-01-15T12:00:00Z", "expiry": "2019-01-15T00:00:00Z"}
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: User not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -342,22 +342,22 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
     put:
       operationId: createUser
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/UserEmailPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/UserEmailPathParameter"
         - name: body
           in: body
           required: true
           description: User account details
           schema:
-            $ref: "./definitions.yaml#/definitions/V4CreateUserRequest"
+            $ref: "./definitions.yaml#/components/schemas/V4CreateUserRequest"
           x-examples:
             application/json:
               {
@@ -373,7 +373,7 @@ paths:
         "201":
           description: User created
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -383,7 +383,7 @@ paths:
         "400":
           description: User already exists
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -391,20 +391,20 @@ paths:
                 "message": "The user could not be created. (invalid input: email 'bob@example.com' already exists)"
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
     delete:
       operationId: deleteUser
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/UserEmailPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/UserEmailPathParameter"
       tags:
         - users
       summary: Delete user
@@ -415,7 +415,7 @@ paths:
         "200":
           description: User deleted
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -423,11 +423,11 @@ paths:
                 "message": "The user with email 'bob@example.com' has been deleted."
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: User not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -437,7 +437,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/clusters/:
     get:
@@ -458,17 +458,17 @@ paths:
         To fetch more details on a cluster, use the [getCluster](#operation/getCluster)
         operation.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Success
           schema:
             type: array
             items:
-              $ref: "./definitions.yaml#/definitions/V4ClusterListItem"
+              $ref: "./definitions.yaml#/components/schemas/V4ClusterListItem"
           examples:
             application/json:
               [
@@ -486,11 +486,11 @@ paths:
                 }
               ]
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     post:
       operationId: addCluster
       tags:
@@ -529,16 +529,16 @@ paths:
         For clusters on AWS, note that all worker nodes must use the same instance type.
 
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
         - name: body
           in: body
           required: true
           description: New cluster definition
           schema:
-            $ref: "./definitions.yaml#/definitions/V4AddClusterRequest"
+            $ref: "./definitions.yaml#/components/schemas/V4AddClusterRequest"
           x-examples:
             application/json:
               {
@@ -555,7 +555,7 @@ paths:
               type: string
               description: URI to obtain details on the new cluster using the [getCluster](#operation/getCluster) operation
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -563,11 +563,11 @@ paths:
                 "message": "A new cluster has been created with ID 'wqtlq'"
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/clusters/{cluster_id}/:
     get:
@@ -575,11 +575,11 @@ paths:
       tags:
         - clusters
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/ClusterIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/ClusterIdPathParameter"
       summary: Get cluster details
       description: |
         This operation allows to obtain all available details on a particular cluster.
@@ -587,7 +587,7 @@ paths:
         "200":
           description: Cluster details
           schema:
-            $ref: "./definitions.yaml#/definitions/V4ClusterDetailsResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4ClusterDetailsResponse"
           examples:
             application/json:
               {
@@ -638,11 +638,11 @@ paths:
                 }
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: Cluster not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -652,28 +652,28 @@ paths:
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     patch:
       operationId: modifyCluster
       tags:
         - clusters
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
         - name: body
           in: body
           required: true
           description: Merge-patch body
           schema:
-            $ref: "./definitions.yaml#/definitions/V4ModifyClusterRequest"
+            $ref: "./definitions.yaml#/components/schemas/V4ModifyClusterRequest"
           x-examples:
             application/merge-patch+json:
               {
                 "name": "New cluster name"
               }
-        - $ref: "./parameters.yaml#/parameters/ClusterIdPathParameter"
+        - $ref: "./parameters.yaml#/components/parameters/ClusterIdPathParameter"
       summary: Modify cluster
       description: |
         This operation allows to modify an existing cluster.
@@ -746,13 +746,13 @@ paths:
         "200":
           description: Cluster modified
           schema:
-            $ref: "./definitions.yaml#/definitions/V4ClusterDetailsResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4ClusterDetailsResponse"
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: Cluster not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -762,17 +762,17 @@ paths:
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     delete:
       operationId: deleteCluster
       tags:
         - clusters
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/ClusterIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/ClusterIdPathParameter"
       summary: Delete cluster
       description: |
         This operation allows to delete a cluster.
@@ -785,7 +785,7 @@ paths:
         "202":
           description: Deleting cluster
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -793,11 +793,11 @@ paths:
                 "message": "The cluster with ID 'wqtlq' is being deleted."
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: Cluster not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -807,7 +807,7 @@ paths:
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/clusters/{cluster_id}/key-pairs/:
     get:
@@ -820,40 +820,40 @@ paths:
 
         The individual array items contain metadata on the key pairs, but neither the key nor the certificate. These can only be obtained upon creation, using the [addKeypair](#operation/addKeyPair) operation.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/ClusterIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/ClusterIdPathParameter"
       responses:
         "200":
           description: Key pairs
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GetKeyPairsResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GetKeyPairsResponse"
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     post:
       operationId: addKeyPair
       tags:
         - key pairs
       summary: Create key pair
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/ClusterIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/ClusterIdPathParameter"
         - name: body
           in: body
           required: true
           description: |
             While the `ttl_hours` attribute is optional and will be set to a default value when omitted, the `description` is mandatory.
           schema:
-            $ref: "./definitions.yaml#/definitions/V4AddKeyPairRequest"
+            $ref: "./definitions.yaml#/components/schemas/V4AddKeyPairRequest"
           x-examples:
             application/json:
               {
@@ -892,7 +892,7 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "./definitions.yaml#/definitions/V4AddKeyPairResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4AddKeyPairResponse"
           examples:
             application/json:
               {
@@ -905,7 +905,7 @@ paths:
                 "ttl_hours": 8640
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
 
   /v4/organizations/:
     get:
@@ -918,17 +918,17 @@ paths:
         member of. In the case of an admin user, the result includes all
         existing organizations.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Success
           schema:
             type: array
             items:
-              $ref: "./definitions.yaml#/definitions/V4OrganizationListItem"
+              $ref: "./definitions.yaml#/components/schemas/V4OrganizationListItem"
           examples:
             application/json:
               [
@@ -937,11 +937,11 @@ paths:
                 {"id": "testorg"}
               ]
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/organizations/{organization_id}/:
     get:
@@ -952,16 +952,16 @@ paths:
       description: |
         This operation fetches organization details.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/OrganizationIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/OrganizationIdPathParameter"
       responses:
         "200":
           description: Organization details
           schema:
-            $ref: "./definitions.yaml#/definitions/V4Organization"
+            $ref: "./definitions.yaml#/components/schemas/V4Organization"
           examples:
             application/json:
               {
@@ -972,11 +972,11 @@ paths:
                 ]
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: Organization not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -986,7 +986,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     put:
       operationId: addOrganization
       tags:
@@ -995,16 +995,16 @@ paths:
       description: |
         This operation allows a user to create an organization.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/OrganizationIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/OrganizationIdPathParameter"
         - name: body
           in: body
           required: true
           schema:
-            $ref: "./definitions.yaml#/definitions/V4Organization"
+            $ref: "./definitions.yaml#/components/schemas/V4Organization"
           x-examples:
             application/json:
               {
@@ -1018,7 +1018,7 @@ paths:
         "201":
           description: Organization created
           schema:
-            $ref: "./definitions.yaml#/definitions/V4Organization"
+            $ref: "./definitions.yaml#/components/schemas/V4Organization"
           examples:
             application/json:
               {
@@ -1029,11 +1029,11 @@ paths:
                 ]
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "409":
           description: Organization already exists
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1043,17 +1043,17 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     patch:
       operationId: modifyOrganization
       tags:
         - organizations
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/OrganizationIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/OrganizationIdPathParameter"
         - name: body
           in: body
           required: true
@@ -1064,7 +1064,7 @@ paths:
                 type: array
                 description: List of members that belong to this organization
                 items:
-                  $ref: "./definitions.yaml#/definitions/V4OrganizationMember"
+                  $ref: "./definitions.yaml#/components/schemas/V4OrganizationMember"
           x-examples:
             application/merge-patch+json:
               {
@@ -1092,11 +1092,11 @@ paths:
         "200":
           description: Organization modified
           schema:
-            $ref: "./definitions.yaml#/definitions/V4Organization"
+            $ref: "./definitions.yaml#/components/schemas/V4Organization"
         "400":
           description: Invalid input
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1104,11 +1104,11 @@ paths:
                 "message": "The organization could not be modified. (invalid input: user 'invalid-email' does not exist or is invalid)"
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: Organization not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1118,7 +1118,7 @@ paths:
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
     delete:
       operationId: deleteOrganization
       tags:
@@ -1128,16 +1128,16 @@ paths:
         This operation allows a user to delete an organization that they are a member of.
         Admin users can delete any organization.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/OrganizationIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/OrganizationIdPathParameter"
       responses:
         "200":
           description: Organization deleted
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1145,11 +1145,11 @@ paths:
                 "message": "The organization with ID 'acme' has been deleted."
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "404":
           description: Organization not found
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1159,7 +1159,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/organizations/{organization_id}/credentials/:
     post:
@@ -1195,16 +1195,16 @@ paths:
         }
         ```
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
-        - $ref: "./parameters.yaml#/parameters/OrganizationIdPathParameter"
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: "./parameters.yaml#/components/parameters/OrganizationIdPathParameter"
         - name: body
           in: body
           required: true
           schema:
-            $ref: "./definitions.yaml#/definitions/V4AddCredentialsRequest"
+            $ref: "./definitions.yaml#/components/schemas/V4AddCredentialsRequest"
           x-examples:
             application/json:
               {
@@ -1224,7 +1224,7 @@ paths:
               type: string
               description: URI of the new credentials resource
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1232,11 +1232,11 @@ paths:
                 "message": "A new set of credentials has been created with ID '5d9h4'"
               }
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
         "409":
           description: Conflict
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
           examples:
             application/json:
               {
@@ -1246,7 +1246,7 @@ paths:
         default:
           description: error
           schema:
-            $ref: "./definitions.yaml#/definitions/V4GenericResponse"
+            $ref: "./definitions.yaml#/components/schemas/V4GenericResponse"
 
   /v4/releases/:
     get:
@@ -1259,17 +1259,17 @@ paths:
         clusters. Might also serve as an archive to obtain details on older
         releases.
       parameters:
-        - $ref: './parameters.yaml#/parameters/RequiredGiantSwarmAuthorizationHeader'
-        - $ref: './parameters.yaml#/parameters/XRequestIDHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmActivityHeader'
-        - $ref: './parameters.yaml#/parameters/XGiantSwarmCmdLineHeader'
+        - $ref: './parameters.yaml#/components/parameters/RequiredGiantSwarmAuthorizationHeader'
+        - $ref: './parameters.yaml#/components/parameters/XRequestIDHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmActivityHeader'
+        - $ref: './parameters.yaml#/components/parameters/XGiantSwarmCmdLineHeader'
       responses:
         "200":
           description: Releases list
           schema:
             type: array
             items:
-              $ref: "./definitions.yaml#/definitions/V4ReleaseListItem"
+              $ref: "./definitions.yaml#/components/schemas/V4ReleaseListItem"
           examples:
             application/json:
               [
@@ -1321,5 +1321,5 @@ paths:
                 }
               ]
         "401":
-          $ref: "./responses.yaml#/responses/V4Generic401Response"
+          $ref: "./responses.yaml#/components/responses/V4Generic401Response"
 

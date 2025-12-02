@@ -1,5 +1,5 @@
 ---
-swagger: "2.0"
+openapi: "3.0.0"
 schemes:
   - "http"
   - "https"
@@ -15,11 +15,11 @@ paths:
     get:
       responses:
         401:
-          $ref: "#/responses/401ErrorResponse"
+          $ref: "#/components/responses/401ErrorResponse"
         404:
-          $ref: "#/responses/404ErrorResponse"
+          $ref: "#/components/responses/404ErrorResponse"
         500:
-          $ref: "#/responses/500ErrorResponse"
+          $ref: "#/components/responses/500ErrorResponse"
   
 definitions:
   invalidRefInObject:
@@ -28,57 +28,57 @@ definitions:
       prop1:
         type: integer
       prop2:
-        $ref: "#/definitions/noWhere"
+        $ref: "#/components/schemas/noWhere"
   invalidRefInMap:
     type: object
     additionalProperties:
-      $ref: "#/definitions/noWhere"
+      $ref: "#/components/schemas/noWhere"
   invalidRefInArray:
     type: array
     items:
-      $ref: "#/definitions/noWhere"
+      $ref: "#/components/schemas/noWhere"
   indirectToInvalidRef:
-    $ref: "#/definitions/invalidRefInArray"
+    $ref: "#/components/schemas/invalidRefInArray"
   invalidRefInTuple:
     type: array
     items:
       - type: integer
-      - $ref: "#/definitions/noWhere"
+      - $ref: "#/components/schemas/noWhere"
 parameters:
   bodyWithRef:
     name: bodyWithRefParam
     in: body
     required: true
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   anotherBodyWithRef:
     name: anotherBodyWithRefParam
     in: body
     required: true
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   funnyParam:
     name: funnyParam
     in: body
     required: true
     schema:
-      $ref: "#/responses/500ErrorResponse/schema"
+      $ref: "#/components/responses/500ErrorResponse/schema"
 
 responses:
   401ErrorResponse:
     description: An unexpected 401 error occurred.
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   404ErrorResponse:
     description: An unexpected 404 error occurred.
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   500ErrorResponse:
     description: An unexpected server error occurred.
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   funnyResponse:
     description: An unexpected server error occurred.
     schema:
-      $ref: "#/responses/401ErrorResponse/schema"
+      $ref: "#/components/responses/401ErrorResponse/schema"
 

@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   version: '0.1.0'
   title: parameters and responses expansion
@@ -14,7 +14,7 @@ parameters:
     name: some
     in: body
     schema:
-      $ref: '#/definitions/myBody'
+      $ref: '#/components/schemas/myBody'
   someHeader:
     name: headerRefed
     in: header
@@ -69,8 +69,8 @@ definitions:
 paths:
   /some/where:
     parameters:
-      - $ref: '#/parameters/someParam'
-      - $ref: '#/parameters/arrayQuery'
+      - $ref: '#/components/parameters/someParam'
+      - $ref: '#/components/parameters/arrayQuery'
       - name: anotherArray
         in: query
         type: array
@@ -78,11 +78,11 @@ paths:
           type: integer
     get:
       parameters:
-      - $ref: '#/parameters/bodyParam'
+      - $ref: '#/components/parameters/bodyParam'
       - name: other
         in: query
         type: string
-      - $ref: '#/parameters/anotherHeader'
+      - $ref: '#/components/parameters/anotherHeader'
       - name: andAnother
         in: query
         type: array
@@ -90,7 +90,7 @@ paths:
           type: integer
       responses:
         403:
-          $ref: '#/responses/notFound'
+          $ref: '#/components/responses/notFound'
         default:
           description: default
           headers:
@@ -108,7 +108,7 @@ paths:
       - name: headerParam
         in: header
         type: string
-      - $ref: '#/parameters/someHeader'
+      - $ref: '#/components/parameters/someHeader'
       - name: nestedParam
         in: query
         type: array
@@ -129,25 +129,25 @@ paths:
               items: 
                 type: string
           schema:
-            $ref: '#/definitions/schemaWithAllOf'
+            $ref: '#/components/schemas/schemaWithAllOf'
         201:
           description: ok
           schema:
             type: array
             items:
-              $ref: '#/definitions/schemaWithAllOf'
+              $ref: '#/components/schemas/schemaWithAllOf'
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
   /some/where/else:
     get:
       parameters:
-      - $ref: '#/parameters/someParam'
+      - $ref: '#/components/parameters/someParam'
       - name: myOtherBodyParam
         in: body
         schema:
-          $ref: '#/definitions/myBody'
+          $ref: '#/components/schemas/myBody'
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
   /some/remote:
     $ref: 'other-source.yaml#/pathItems/patchMethod'

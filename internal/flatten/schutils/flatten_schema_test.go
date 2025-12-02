@@ -16,7 +16,8 @@ func TestFlattenSchema_Save(t *testing.T) {
 
 	sp := &spec.Swagger{}
 	Save(sp, "theName", spec.StringProperty())
-	assert.Contains(t, sp.Definitions, "theName")
+	assert.NotNil(t, sp.Components)
+	assert.Contains(t, sp.Components.Schemas, "theName")
 
 	saveNilSchema := func() {
 		Save(sp, "ThisNilSchema", nil)
@@ -25,6 +26,6 @@ func TestFlattenSchema_Save(t *testing.T) {
 }
 
 func TestFlattenSchema_Clone(t *testing.T) {
-	sch := spec.RefSchema("#/definitions/x")
+	sch := spec.RefSchema("#/components/schemas/x")
 	assert.Equal(t, sch, Clone(sch))
 }

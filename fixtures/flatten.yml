@@ -1,5 +1,5 @@
 ---
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   version: "0.1.0"
   title: reference analysis
@@ -18,12 +18,12 @@ responses:
 paths:
   "/some/where/{id}":
     parameters:
-      - $ref: "external/parameters.yml#/parameters/idParam"
+      - $ref: "external/parameters.yml#/components/parameters/idParam"
 
     get:
       parameters:
-      - $ref: "external/parameters.yml#/parameters/limitParam"
-      - $ref: "#/parameters/someParam" 
+      - $ref: "external/parameters.yml#/components/parameters/limitParam"
+      - $ref: "#/components/parameters/someParam" 
       - name: other
         in: query
         type: string
@@ -33,53 +33,53 @@ paths:
         default:
           $ref: "external/nestedResponses.yml#/genericResponse"
         404:
-          $ref: "#/responses/notFound"
+          $ref: "#/components/responses/notFound"
         200:
           description: "RecordHolder"
           schema:
             type: object
             properties:
               record:
-                $ref: "external/definitions.yml#/definitions/nestedThing"
+                $ref: "external/definitions.yml#/components/schemas/nestedThing"
   "/other/place":
     $ref: "external/pathItem.yml"
 
 definitions:
   namedAgain:
-    $ref: "external/definitions.yml#/definitions/named"
+    $ref: "external/definitions.yml#/components/schemas/named"
 
   datedTag:
     allOf:
       - type: string
         format: date
-      - $ref: "external/definitions.yml#/definitions/tag"
+      - $ref: "external/definitions.yml#/components/schemas/tag"
   
   records:
     type: array
     items:
-      - $ref: "external/definitions.yml#/definitions/record"
+      - $ref: "external/definitions.yml#/components/schemas/record"
 
   datedRecords:
     type: array
     items:
       - type: string
         format: date-time
-      - $ref: "external/definitions.yml#/definitions/record"
+      - $ref: "external/definitions.yml#/components/schemas/record"
     
   otherRecords:
     type: array
     items:
-      $ref: "external/definitions.yml#/definitions/record"
+      $ref: "external/definitions.yml#/components/schemas/record"
   
   tags:
     type: object
     additionalProperties:
-      $ref: "external/definitions.yml#/definitions/tag"
+      $ref: "external/definitions.yml#/components/schemas/tag"
 
   namedThing:
     type: object
     properties:
       name:
-        $ref: "external/definitions.yml#/definitions/named"
+        $ref: "external/definitions.yml#/components/schemas/named"
       namedAgain:
-        $ref: "#/definitions/namedAgain"
+        $ref: "#/components/schemas/namedAgain"

@@ -1,4 +1,4 @@
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   version: 0.1.1
   title: test 1
@@ -24,23 +24,23 @@ paths:
           description: max number of results
           required: false
           schema:
-            $ref: '#/definitions/a'
+            $ref: '#/components/schemas/a'
       responses:
         '200':
           description: Success
           schema:
-            $ref: '#/definitions/b'
+            $ref: '#/components/schemas/b'
         '203':
           description: Success
           schema:
-            $ref: '#/definitions/c'
+            $ref: '#/components/schemas/c'
 
 definitions:
   a:
     type: string
   b:
-    $ref: 'test3-model-schema.json#/definitions/b'
+    $ref: 'test3-model-schema.json#/components/schemas/b'
   c:
-    $ref: 'test3-model-schema.json#/definitions/c'
+    $ref: 'test3-model-schema.json#/components/schemas/c'
 
 

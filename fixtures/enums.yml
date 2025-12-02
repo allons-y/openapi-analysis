@@ -1,5 +1,5 @@
 ---
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   version: "0.1.0"
   title: reference analysis
@@ -25,12 +25,12 @@ responses:
           - '1234'
           - '123'
     schema:
-      $ref: "#/definitions/error"
+      $ref: "#/components/schemas/error"
 
 paths:
   "/some/where/{id}":
     parameters:
-      - $ref: "#/parameters/idParam"
+      - $ref: "#/components/parameters/idParam"
       - name: name
         in: query
         pattern: 'b[A-Za-z0-9]+'
@@ -86,7 +86,7 @@ paths:
           schema:
             type: object
         404:
-          $ref: "#/responses/notFound"
+          $ref: "#/components/responses/notFound"
         200:
           headers:
             X-Request-Id:
@@ -96,7 +96,7 @@ paths:
                 - dA
                 - d9
           schema:
-            $ref: "#/definitions/tag"
+            $ref: "#/components/schemas/tag"
   "/other/place":
     post:
       parameters:
@@ -154,7 +154,7 @@ definitions:
           - ga
           - g9
       audit:
-        $ref: "#/definitions/record"
+        $ref: "#/components/schemas/record"
   record:
     type: object
     properties:

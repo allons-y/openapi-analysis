@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   title: cannot expand
 schemes:
@@ -27,7 +27,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/nowhere'
+              $ref: '#/components/schemas/nowhere'
         '201':
           description: OK
           schema:
@@ -39,7 +39,7 @@ paths:
         '200':
           description: OK
           schema:
-            $ref: '#/parameters/someWhere'
+            $ref: '#/components/parameters/someWhere'
   /wrongcode:
     get:
       operationId: target type mismatch

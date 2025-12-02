@@ -1,5 +1,5 @@
 ---
-swagger: "2.0"
+openapi: "3.0.0"
 schemes:
   - "http"
   - "https"
@@ -15,7 +15,7 @@ paths:
       - name: foulBodyRef
         in: body
         schema: # <-- foul $ref
-          $ref: '#/parameters/bodyWithRef'
+          $ref: '#/components/parameters/bodyWithRef'
       responses:
         200:
           description: "no error"
@@ -23,11 +23,11 @@ paths:
             type: "string"
             example: "OK"
         401:
-          $ref: "#/responses/401ErrorResponse"
+          $ref: "#/components/responses/401ErrorResponse"
         404:
-          $ref: "#/responses/404ErrorResponse"
+          $ref: "#/components/responses/404ErrorResponse"
         500:
-          $ref: "#/responses/500ErrorResponse"
+          $ref: "#/components/responses/500ErrorResponse"
 definitions:
   Error:
     type: "object"
@@ -40,7 +40,7 @@ parameters:
     name: bodyWithRefParam
     in: body
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   nobodyWithRef:
     name: bodyWithRefParam
     in: query
@@ -50,33 +50,33 @@ parameters:
     name: anotherBodyWithRefParam
     in: body
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   funnyParam:
     name: funnyParam
     in: body
     schema:
-      $ref: "#/responses/500ErrorResponse/schema"
+      $ref: "#/components/responses/500ErrorResponse/schema"
 
 responses:
   401ErrorResponse:
     description: An unexpected 401 error occurred.
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   404ErrorResponse:
     description: An unexpected 404 error occurred.
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   500ErrorResponse:
     description: An unexpected server error occurred.
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/components/schemas/Error"
   funnyResponse:
     description: An unexpected server error occurred.
     schema:
-      $ref: "#/responses/401ErrorResponse/schema"
+      $ref: "#/components/responses/401ErrorResponse/schema"
   foulResponse:
     description: An unexpected server error occurred.
     schema:
-      $ref: "#/responses/noSchemaResponse"
+      $ref: "#/components/responses/noSchemaResponse"
   noSchemaResponse:
     description: An unexpected server error occurred.

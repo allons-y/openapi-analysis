@@ -1,5 +1,5 @@
 ---
-swagger: "2.0"
+openapi: "3.0.0"
 schemes:
   - "http"
   - "https"
@@ -15,13 +15,13 @@ paths:
         401:
           description: an error
           schema:
-            $ref: "#/responses/401ValidSchema"
+            $ref: "#/components/responses/401ValidSchema"
         404:
           description: another error
           schema:
-            $ref: "#/parameters/bodyValidSchema"
+            $ref: "#/components/parameters/bodyValidSchema"
         500:
-          $ref: "#/responses/401ValidSchema"
+          $ref: "#/components/responses/401ValidSchema"
 
 definitions:
   Error:

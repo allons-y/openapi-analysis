@@ -18,20 +18,20 @@ var refFixtures = []struct {
 	Key string
 	Ref spec.Ref
 }{
-	{"#/parameters/someParam/schema", spec.MustCreateRef("#/definitions/record")},
-	{"#/paths/~1some~1where~1{id}/parameters/1/schema", spec.MustCreateRef("#/definitions/record")},
-	{"#/paths/~1some~1where~1{id}/get/parameters/2/schema", spec.MustCreateRef("#/definitions/record")},
-	{"#/responses/someResponse/schema", spec.MustCreateRef("#/definitions/record")},
-	{"#/paths/~1some~1where~1{id}/get/responses/default/schema", spec.MustCreateRef("#/definitions/record")},
-	{"#/paths/~1some~1where~1{id}/get/responses/200/schema", spec.MustCreateRef("#/definitions/record")},
-	{"#/definitions/namedAgain", spec.MustCreateRef("#/definitions/named")},
-	{"#/definitions/datedTag/allOf/1", spec.MustCreateRef("#/definitions/tag")},
-	{"#/definitions/datedRecords/items/1", spec.MustCreateRef("#/definitions/record")},
-	{"#/definitions/datedTaggedRecords/items/1", spec.MustCreateRef("#/definitions/record")},
-	{"#/definitions/datedTaggedRecords/additionalItems", spec.MustCreateRef("#/definitions/tag")},
-	{"#/definitions/otherRecords/items", spec.MustCreateRef("#/definitions/record")},
-	{"#/definitions/tags/additionalProperties", spec.MustCreateRef("#/definitions/tag")},
-	{"#/definitions/namedThing/properties/name", spec.MustCreateRef("#/definitions/named")},
+	{"#/components/parameters/someParam/schema", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/paths/~1some~1where~1{id}/parameters/1/schema", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/paths/~1some~1where~1{id}/get/parameters/2/schema", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/components/responses/someResponse/content/application~1json/schema", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/paths/~1some~1where~1{id}/get/responses/default/content/application~1json/schema", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/paths/~1some~1where~1{id}/get/responses/200/content/application~1json/schema", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/components/schemas/namedAgain", spec.MustCreateRef("#/components/schemas/named")},
+	{"#/components/schemas/datedTag/allOf/1", spec.MustCreateRef("#/components/schemas/tag")},
+	{"#/components/schemas/datedRecords/items/1", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/components/schemas/datedTaggedRecords/items/1", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/components/schemas/datedTaggedRecords/additionalItems", spec.MustCreateRef("#/components/schemas/tag")},
+	{"#/components/schemas/otherRecords/items", spec.MustCreateRef("#/components/schemas/record")},
+	{"#/components/schemas/tags/additionalProperties", spec.MustCreateRef("#/components/schemas/tag")},
+	{"#/components/schemas/namedThing/properties/name", spec.MustCreateRef("#/components/schemas/named")},
 }
 
 func TestUpdateRef(t *testing.T) {

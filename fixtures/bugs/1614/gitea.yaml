@@ -8,7 +8,7 @@
   schemes: 
     - "http"
     - "https"
-  swagger: "2.0"
+  openapi: "3.0.0"
   info: 
     description: "This documentation describes the Gitea API."
     title: "Gitea API."
@@ -33,14 +33,14 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateUserOption"
+              $ref: "#/components/schemas/CreateUserOption"
         responses: 
           201: 
-            $ref: "#/responses/User"
+            $ref: "#/components/responses/User"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /admin/users/{username}: 
       delete: 
         produces: 
@@ -58,11 +58,11 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
       patch: 
         consumes: 
           - "application/json"
@@ -83,14 +83,14 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditUserOption"
+              $ref: "#/components/schemas/EditUserOption"
         responses: 
           200: 
-            $ref: "#/responses/User"
+            $ref: "#/components/responses/User"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /admin/users/{username}/keys: 
       post: 
         consumes: 
@@ -110,11 +110,11 @@
             required: true
         responses: 
           201: 
-            $ref: "#/responses/PublicKey"
+            $ref: "#/components/responses/PublicKey"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /admin/users/{username}/keys/{id}: 
       delete: 
         produces: 
@@ -138,11 +138,11 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
     /admin/users/{username}/orgs: 
       post: 
         consumes: 
@@ -162,11 +162,11 @@
             required: true
         responses: 
           201: 
-            $ref: "#/responses/Organization"
+            $ref: "#/components/responses/Organization"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /admin/users/{username}/repos: 
       post: 
         consumes: 
@@ -186,11 +186,11 @@
             required: true
         responses: 
           201: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /markdown: 
       post: 
         consumes: 
@@ -206,12 +206,12 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/MarkdownOption"
+              $ref: "#/components/schemas/MarkdownOption"
         responses: 
           200: 
-            $ref: "#/responses/MarkdownRender"
+            $ref: "#/components/responses/MarkdownRender"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /markdown/raw: 
       post: 
         consumes: 
@@ -232,9 +232,9 @@
               type: "string"
         responses: 
           200: 
-            $ref: "#/responses/MarkdownRender"
+            $ref: "#/components/responses/MarkdownRender"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /org/{org}/repos: 
       post: 
         consumes: 
@@ -256,14 +256,14 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateRepoOption"
+              $ref: "#/components/schemas/CreateRepoOption"
         responses: 
           201: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /orgs/{org}: 
       get: 
         produces: 
@@ -281,7 +281,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Organization"
+            $ref: "#/components/responses/Organization"
       patch: 
         consumes: 
           - "application/json"
@@ -302,10 +302,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditOrgOption"
+              $ref: "#/components/schemas/EditOrgOption"
         responses: 
           200: 
-            $ref: "#/responses/Organization"
+            $ref: "#/components/responses/Organization"
     /orgs/{org}/hooks: 
       get: 
         produces: 
@@ -323,7 +323,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/HookList"
+            $ref: "#/components/responses/HookList"
     /orgs/{org}/hooks/: 
       post: 
         consumes: 
@@ -343,7 +343,7 @@
             required: true
         responses: 
           201: 
-            $ref: "#/responses/Hook"
+            $ref: "#/components/responses/Hook"
     /orgs/{org}/hooks/{id}: 
       get: 
         produces: 
@@ -367,7 +367,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Hook"
+            $ref: "#/components/responses/Hook"
       delete: 
         produces: 
           - "application/json"
@@ -390,7 +390,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -415,7 +415,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Hook"
+            $ref: "#/components/responses/Hook"
     /orgs/{org}/members: 
       get: 
         produces: 
@@ -433,7 +433,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /orgs/{org}/members/{username}: 
       get: 
         tags: 
@@ -457,11 +457,11 @@
           204: 
             description: "user is a member"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
           404: 
             description: "user is not a member"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
       delete: 
         produces: 
           - "application/json"
@@ -486,7 +486,7 @@
           204: 
             description: "member removed"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
     /orgs/{org}/public_members: 
       get: 
         produces: 
@@ -504,7 +504,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /orgs/{org}/public_members/{username}: 
       get: 
         tags: 
@@ -528,11 +528,11 @@
           204: 
             description: "user is a public member"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
           404: 
             description: "user is not a public member"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
       put: 
         produces: 
           - "application/json"
@@ -557,7 +557,7 @@
           204: 
             description: "membership publicized"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
       delete: 
         produces: 
           - "application/json"
@@ -580,7 +580,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /orgs/{org}/repos: 
       get: 
         produces: 
@@ -598,7 +598,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /orgs/{org}/teams: 
       get: 
         produces: 
@@ -616,7 +616,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/TeamList"
+            $ref: "#/components/responses/TeamList"
       post: 
         consumes: 
           - "application/json"
@@ -637,10 +637,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateTeamOption"
+              $ref: "#/components/schemas/CreateTeamOption"
         responses: 
           201: 
-            $ref: "#/responses/Team"
+            $ref: "#/components/responses/Team"
     /repos/migrate: 
       post: 
         consumes: 
@@ -656,10 +656,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/MigrateRepoForm"
+              $ref: "#/components/schemas/MigrateRepoForm"
         responses: 
           201: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
     /repos/search: 
       get: 
         produces: 
@@ -701,9 +701,9 @@
             in: "query"
         responses: 
           200: 
-            $ref: "#/responses/SearchResults"
+            $ref: "#/components/responses/SearchResults"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /repos/{owner}/{repo}: 
       get: 
         produces: 
@@ -727,7 +727,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
       delete: 
         produces: 
           - "application/json"
@@ -750,9 +750,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
     /repos/{owner}/{repo}/archive/{archive}: 
       get: 
         produces: 
@@ -806,7 +806,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/BranchList"
+            $ref: "#/components/responses/BranchList"
     /repos/{owner}/{repo}/branches/{branch}: 
       get: 
         produces: 
@@ -836,7 +836,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Branch"
+            $ref: "#/components/responses/Branch"
     /repos/{owner}/{repo}/collaborators: 
       get: 
         produces: 
@@ -860,7 +860,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /repos/{owner}/{repo}/collaborators/{collaborator}: 
       get: 
         produces: 
@@ -890,9 +890,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           404: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       put: 
         produces: 
           - "application/json"
@@ -923,10 +923,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/AddCollaboratorOption"
+              $ref: "#/components/schemas/AddCollaboratorOption"
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       delete: 
         produces: 
           - "application/json"
@@ -955,7 +955,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/commits/{ref}/statuses: 
       get: 
         produces: 
@@ -985,7 +985,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Status"
+            $ref: "#/components/responses/Status"
     /repos/{owner}/{repo}/editorconfig/{filepath}: 
       get: 
         produces: 
@@ -1039,7 +1039,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
       post: 
         produces: 
           - "application/json"
@@ -1064,10 +1064,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateForkOption"
+              $ref: "#/components/schemas/CreateForkOption"
         responses: 
           202: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
     /repos/{owner}/{repo}/hooks: 
       get: 
         produces: 
@@ -1091,7 +1091,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/HookList"
+            $ref: "#/components/responses/HookList"
       post: 
         consumes: 
           - "application/json"
@@ -1118,10 +1118,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateHookOption"
+              $ref: "#/components/schemas/CreateHookOption"
         responses: 
           201: 
-            $ref: "#/responses/Hook"
+            $ref: "#/components/responses/Hook"
     /repos/{owner}/{repo}/hooks/{id}: 
       get: 
         produces: 
@@ -1151,7 +1151,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Hook"
+            $ref: "#/components/responses/Hook"
       delete: 
         produces: 
           - "application/json"
@@ -1180,9 +1180,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
       patch: 
         produces: 
           - "application/json"
@@ -1213,10 +1213,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditHookOption"
+              $ref: "#/components/schemas/EditHookOption"
         responses: 
           200: 
-            $ref: "#/responses/Hook"
+            $ref: "#/components/responses/Hook"
     /repos/{owner}/{repo}/hooks/{id}/tests: 
       post: 
         produces: 
@@ -1246,7 +1246,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/issues: 
       get: 
         produces: 
@@ -1285,7 +1285,7 @@
             in: "query"
         responses: 
           200: 
-            $ref: "#/responses/IssueList"
+            $ref: "#/components/responses/IssueList"
       post: 
         consumes: 
           - "application/json"
@@ -1312,10 +1312,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateIssueOption"
+              $ref: "#/components/schemas/CreateIssueOption"
         responses: 
           201: 
-            $ref: "#/responses/Issue"
+            $ref: "#/components/responses/Issue"
     /repos/{owner}/{repo}/issues/comments: 
       get: 
         produces: 
@@ -1344,7 +1344,7 @@
             in: "query"
         responses: 
           200: 
-            $ref: "#/responses/CommentList"
+            $ref: "#/components/responses/CommentList"
     /repos/{owner}/{repo}/issues/comments/{id}: 
       delete: 
         tags: 
@@ -1372,7 +1372,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -1405,10 +1405,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditIssueCommentOption"
+              $ref: "#/components/schemas/EditIssueCommentOption"
         responses: 
           200: 
-            $ref: "#/responses/Comment"
+            $ref: "#/components/responses/Comment"
     /repos/{owner}/{repo}/issues/{id}/times: 
       get: 
         produces: 
@@ -1438,7 +1438,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/TrackedTimeList"
+            $ref: "#/components/responses/TrackedTimeList"
       post: 
         consumes: 
           - "application/json"
@@ -1471,14 +1471,14 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/AddTimeOption"
+              $ref: "#/components/schemas/AddTimeOption"
         responses: 
           200: 
-            $ref: "#/responses/TrackedTime"
+            $ref: "#/components/responses/TrackedTime"
           400: 
-            $ref: "#/responses/error"
+            $ref: "#/components/responses/error"
           403: 
-            $ref: "#/responses/error"
+            $ref: "#/components/responses/error"
     /repos/{owner}/{repo}/issues/{index}: 
       get: 
         produces: 
@@ -1508,7 +1508,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Issue"
+            $ref: "#/components/responses/Issue"
       patch: 
         consumes: 
           - "application/json"
@@ -1541,10 +1541,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditIssueOption"
+              $ref: "#/components/schemas/EditIssueOption"
         responses: 
           201: 
-            $ref: "#/responses/Issue"
+            $ref: "#/components/responses/Issue"
     /repos/{owner}/{repo}/issues/{index}/comments: 
       get: 
         produces: 
@@ -1579,7 +1579,7 @@
             in: "query"
         responses: 
           200: 
-            $ref: "#/responses/CommentList"
+            $ref: "#/components/responses/CommentList"
       post: 
         consumes: 
           - "application/json"
@@ -1612,10 +1612,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateIssueCommentOption"
+              $ref: "#/components/schemas/CreateIssueCommentOption"
         responses: 
           201: 
-            $ref: "#/responses/Comment"
+            $ref: "#/components/responses/Comment"
     /repos/{owner}/{repo}/issues/{index}/comments/{id}: 
       delete: 
         tags: 
@@ -1650,7 +1650,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -1690,10 +1690,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditIssueCommentOption"
+              $ref: "#/components/schemas/EditIssueCommentOption"
         responses: 
           200: 
-            $ref: "#/responses/Comment"
+            $ref: "#/components/responses/Comment"
     /repos/{owner}/{repo}/issues/{index}/deadline: 
       post: 
         consumes: 
@@ -1727,18 +1727,18 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditDeadlineOption"
+              $ref: "#/components/schemas/EditDeadlineOption"
         responses: 
           201: 
-            $ref: "#/responses/IssueDeadline"
+            $ref: "#/components/responses/IssueDeadline"
           403: 
             description: "Not repo writer"
             schema: 
-              $ref: "#/responses/forbidden"
+              $ref: "#/components/responses/forbidden"
           404: 
             description: "Issue not found"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/issues/{index}/labels: 
       get: 
         produces: 
@@ -1768,9 +1768,9 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/LabelList"
+            $ref: "#/components/responses/LabelList"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
       put: 
         consumes: 
           - "application/json"
@@ -1803,10 +1803,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/IssueLabelsOption"
+              $ref: "#/components/schemas/IssueLabelsOption"
         responses: 
           200: 
-            $ref: "#/responses/LabelList"
+            $ref: "#/components/responses/LabelList"
       post: 
         consumes: 
           - "application/json"
@@ -1839,10 +1839,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/IssueLabelsOption"
+              $ref: "#/components/schemas/IssueLabelsOption"
         responses: 
           200: 
-            $ref: "#/responses/LabelList"
+            $ref: "#/components/responses/LabelList"
       delete: 
         produces: 
           - "application/json"
@@ -1871,7 +1871,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/issues/{index}/labels/{id}: 
       delete: 
         produces: 
@@ -1907,7 +1907,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/keys: 
       get: 
         produces: 
@@ -1931,7 +1931,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/DeployKeyList"
+            $ref: "#/components/responses/DeployKeyList"
       post: 
         consumes: 
           - "application/json"
@@ -1958,10 +1958,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateKeyOption"
+              $ref: "#/components/schemas/CreateKeyOption"
         responses: 
           201: 
-            $ref: "#/responses/DeployKey"
+            $ref: "#/components/responses/DeployKey"
     /repos/{owner}/{repo}/keys/{id}: 
       get: 
         produces: 
@@ -1991,7 +1991,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/DeployKey"
+            $ref: "#/components/responses/DeployKey"
       delete: 
         tags: 
           - "repository"
@@ -2018,7 +2018,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/labels: 
       get: 
         produces: 
@@ -2042,7 +2042,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/LabelList"
+            $ref: "#/components/responses/LabelList"
       post: 
         consumes: 
           - "application/json"
@@ -2069,10 +2069,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateLabelOption"
+              $ref: "#/components/schemas/CreateLabelOption"
         responses: 
           201: 
-            $ref: "#/responses/Label"
+            $ref: "#/components/responses/Label"
     /repos/{owner}/{repo}/labels/{id}: 
       get: 
         produces: 
@@ -2102,7 +2102,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Label"
+            $ref: "#/components/responses/Label"
       delete: 
         tags: 
           - "issue"
@@ -2129,7 +2129,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -2162,10 +2162,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditLabelOption"
+              $ref: "#/components/schemas/EditLabelOption"
         responses: 
           200: 
-            $ref: "#/responses/Label"
+            $ref: "#/components/responses/Label"
     /repos/{owner}/{repo}/milestones: 
       get: 
         produces: 
@@ -2189,7 +2189,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/MilestoneList"
+            $ref: "#/components/responses/MilestoneList"
       post: 
         consumes: 
           - "application/json"
@@ -2216,10 +2216,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateMilestoneOption"
+              $ref: "#/components/schemas/CreateMilestoneOption"
         responses: 
           201: 
-            $ref: "#/responses/Milestone"
+            $ref: "#/components/responses/Milestone"
     /repos/{owner}/{repo}/milestones/{id}: 
       get: 
         produces: 
@@ -2249,7 +2249,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Milestone"
+            $ref: "#/components/responses/Milestone"
       delete: 
         tags: 
           - "issue"
@@ -2276,7 +2276,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -2309,10 +2309,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditMilestoneOption"
+              $ref: "#/components/schemas/EditMilestoneOption"
         responses: 
           200: 
-            $ref: "#/responses/Milestone"
+            $ref: "#/components/responses/Milestone"
     /repos/{owner}/{repo}/mirror-sync: 
       post: 
         produces: 
@@ -2336,7 +2336,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/pulls: 
       get: 
         produces: 
@@ -2360,7 +2360,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/PullRequestList"
+            $ref: "#/components/responses/PullRequestList"
       post: 
         consumes: 
           - "application/json"
@@ -2387,10 +2387,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreatePullRequestOption"
+              $ref: "#/components/schemas/CreatePullRequestOption"
         responses: 
           201: 
-            $ref: "#/responses/PullRequest"
+            $ref: "#/components/responses/PullRequest"
     /repos/{owner}/{repo}/pulls/{index}: 
       get: 
         produces: 
@@ -2420,7 +2420,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/PullRequest"
+            $ref: "#/components/responses/PullRequest"
       patch: 
         consumes: 
           - "application/json"
@@ -2453,10 +2453,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditPullRequestOption"
+              $ref: "#/components/schemas/EditPullRequestOption"
         responses: 
           201: 
-            $ref: "#/responses/PullRequest"
+            $ref: "#/components/responses/PullRequest"
     /repos/{owner}/{repo}/pulls/{index}/merge: 
       get: 
         produces: 
@@ -2488,11 +2488,11 @@
           204: 
             description: "pull request has been merged"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
           404: 
             description: "pull request has not been merged"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
       post: 
         produces: 
           - "application/json"
@@ -2521,9 +2521,9 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           405: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/raw/{filepath}: 
       get: 
         produces: 
@@ -2577,7 +2577,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/ReleaseList"
+            $ref: "#/components/responses/ReleaseList"
       post: 
         consumes: 
           - "application/json"
@@ -2604,10 +2604,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateReleaseOption"
+              $ref: "#/components/schemas/CreateReleaseOption"
         responses: 
           201: 
-            $ref: "#/responses/Release"
+            $ref: "#/components/responses/Release"
     /repos/{owner}/{repo}/releases/{id}: 
       get: 
         produces: 
@@ -2637,7 +2637,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Release"
+            $ref: "#/components/responses/Release"
       delete: 
         tags: 
           - "repository"
@@ -2664,7 +2664,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -2697,10 +2697,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditReleaseOption"
+              $ref: "#/components/schemas/EditReleaseOption"
         responses: 
           200: 
-            $ref: "#/responses/Release"
+            $ref: "#/components/responses/Release"
     /repos/{owner}/{repo}/releases/{id}/assets: 
       get: 
         produces: 
@@ -2730,7 +2730,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/AttachmentList"
+            $ref: "#/components/responses/AttachmentList"
       post: 
         consumes: 
           - "multipart/form-data"
@@ -2772,7 +2772,7 @@
             required: true
         responses: 
           201: 
-            $ref: "#/responses/Attachment"
+            $ref: "#/components/responses/Attachment"
     /repos/{owner}/{repo}/releases/{id}/assets/{attachment_id}: 
       get: 
         produces: 
@@ -2808,7 +2808,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Attachment"
+            $ref: "#/components/responses/Attachment"
       delete: 
         produces: 
           - "application/json"
@@ -2843,7 +2843,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -2882,10 +2882,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditAttachmentOptions"
+              $ref: "#/components/schemas/EditAttachmentOptions"
         responses: 
           201: 
-            $ref: "#/responses/Attachment"
+            $ref: "#/components/responses/Attachment"
     /repos/{owner}/{repo}/stargazers: 
       get: 
         produces: 
@@ -2909,7 +2909,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /repos/{owner}/{repo}/statuses/{sha}: 
       get: 
         produces: 
@@ -2939,7 +2939,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/StatusList"
+            $ref: "#/components/responses/StatusList"
       post: 
         produces: 
           - "application/json"
@@ -2970,10 +2970,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateStatusOption"
+              $ref: "#/components/schemas/CreateStatusOption"
         responses: 
           200: 
-            $ref: "#/responses/StatusList"
+            $ref: "#/components/responses/StatusList"
     /repos/{owner}/{repo}/subscribers: 
       get: 
         produces: 
@@ -2997,7 +2997,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /repos/{owner}/{repo}/subscription: 
       get: 
         tags: 
@@ -3019,7 +3019,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/WatchInfo"
+            $ref: "#/components/responses/WatchInfo"
       put: 
         tags: 
           - "repository"
@@ -3040,7 +3040,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/WatchInfo"
+            $ref: "#/components/responses/WatchInfo"
       delete: 
         tags: 
           - "repository"
@@ -3061,7 +3061,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /repos/{owner}/{repo}/times: 
       get: 
         produces: 
@@ -3085,7 +3085,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/TrackedTimeList"
+            $ref: "#/components/responses/TrackedTimeList"
     /repos/{owner}/{repo}/times/{user}: 
       get: 
         produces: 
@@ -3115,7 +3115,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/TrackedTimeList"
+            $ref: "#/components/responses/TrackedTimeList"
     /repositories/{id}: 
       get: 
         produces: 
@@ -3133,7 +3133,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
     /teams/{id}: 
       get: 
         produces: 
@@ -3151,7 +3151,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Team"
+            $ref: "#/components/responses/Team"
       delete: 
         tags: 
           - "organization"
@@ -3168,7 +3168,7 @@
           204: 
             description: "team deleted"
             schema: 
-              $ref: "#/responses/empty"
+              $ref: "#/components/responses/empty"
       patch: 
         consumes: 
           - "application/json"
@@ -3189,10 +3189,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/EditTeamOption"
+              $ref: "#/components/schemas/EditTeamOption"
         responses: 
           200: 
-            $ref: "#/responses/Team"
+            $ref: "#/components/responses/Team"
     /teams/{id}/members: 
       get: 
         produces: 
@@ -3210,7 +3210,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /teams/{id}/members/{username}: 
       put: 
         produces: 
@@ -3234,7 +3234,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       delete: 
         produces: 
           - "application/json"
@@ -3257,7 +3257,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /teams/{id}/repos: 
       get: 
         produces: 
@@ -3275,7 +3275,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /teams/{id}/repos/{org}/{repo}: 
       put: 
         produces: 
@@ -3305,7 +3305,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       delete: 
         description: "This does not delete the repository, it only removes the repository from the team."
         produces: 
@@ -3335,7 +3335,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /topics/search: 
       get: 
         produces: 
@@ -3353,7 +3353,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
     /user: 
       get: 
         produces: 
@@ -3364,7 +3364,7 @@
         operationId: "userGetCurrent"
         responses: 
           200: 
-            $ref: "#/responses/User"
+            $ref: "#/components/responses/User"
     /user/emails: 
       get: 
         produces: 
@@ -3375,7 +3375,7 @@
         operationId: "userListEmails"
         responses: 
           200: 
-            $ref: "#/responses/EmailList"
+            $ref: "#/components/responses/EmailList"
       post: 
         produces: 
           - "application/json"
@@ -3388,10 +3388,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateEmailOption"
+              $ref: "#/components/schemas/CreateEmailOption"
         responses: 
           201: 
-            $ref: "#/responses/EmailList"
+            $ref: "#/components/responses/EmailList"
       delete: 
         produces: 
           - "application/json"
@@ -3404,10 +3404,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/DeleteEmailOption"
+              $ref: "#/components/schemas/DeleteEmailOption"
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /user/followers: 
       get: 
         produces: 
@@ -3418,7 +3418,7 @@
         operationId: "userCurrentListFollowers"
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /user/following: 
       get: 
         produces: 
@@ -3429,7 +3429,7 @@
         operationId: "userCurrentListFollowing"
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /user/following/{username}: 
       get: 
         tags: 
@@ -3445,9 +3445,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
       put: 
         tags: 
           - "user"
@@ -3462,7 +3462,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       delete: 
         tags: 
           - "user"
@@ -3477,7 +3477,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /user/gpg_keys: 
       get: 
         produces: 
@@ -3488,7 +3488,7 @@
         operationId: "userCurrentListGPGKeys"
         responses: 
           200: 
-            $ref: "#/responses/GPGKeyList"
+            $ref: "#/components/responses/GPGKeyList"
       post: 
         consumes: 
           - "application/json"
@@ -3503,12 +3503,12 @@
             name: "Form"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateGPGKeyOption"
+              $ref: "#/components/schemas/CreateGPGKeyOption"
         responses: 
           201: 
-            $ref: "#/responses/GPGKey"
+            $ref: "#/components/responses/GPGKey"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /user/gpg_keys/{id}: 
       get: 
         produces: 
@@ -3526,9 +3526,9 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/GPGKey"
+            $ref: "#/components/responses/GPGKey"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
       delete: 
         produces: 
           - "application/json"
@@ -3545,9 +3545,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
     /user/keys: 
       get: 
         produces: 
@@ -3558,7 +3558,7 @@
         operationId: "userCurrentListKeys"
         responses: 
           200: 
-            $ref: "#/responses/PublicKeyList"
+            $ref: "#/components/responses/PublicKeyList"
       post: 
         consumes: 
           - "application/json"
@@ -3573,12 +3573,12 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateKeyOption"
+              $ref: "#/components/schemas/CreateKeyOption"
         responses: 
           201: 
-            $ref: "#/responses/PublicKey"
+            $ref: "#/components/responses/PublicKey"
           422: 
-            $ref: "#/responses/validationError"
+            $ref: "#/components/responses/validationError"
     /user/keys/{id}: 
       get: 
         produces: 
@@ -3596,9 +3596,9 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/PublicKey"
+            $ref: "#/components/responses/PublicKey"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
       delete: 
         produces: 
           - "application/json"
@@ -3615,11 +3615,11 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           403: 
-            $ref: "#/responses/forbidden"
+            $ref: "#/components/responses/forbidden"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
     /user/orgs: 
       get: 
         produces: 
@@ -3630,7 +3630,7 @@
         operationId: "orgListCurrentUserOrgs"
         responses: 
           200: 
-            $ref: "#/responses/OrganizationList"
+            $ref: "#/components/responses/OrganizationList"
     /user/repos: 
       get: 
         produces: 
@@ -3641,7 +3641,7 @@
         operationId: "userCurrentListRepos"
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
       post: 
         consumes: 
           - "application/json"
@@ -3657,10 +3657,10 @@
             name: "body"
             in: "body"
             schema: 
-              $ref: "#/definitions/CreateRepoOption"
+              $ref: "#/components/schemas/CreateRepoOption"
         responses: 
           201: 
-            $ref: "#/responses/Repository"
+            $ref: "#/components/responses/Repository"
     /user/starred: 
       get: 
         produces: 
@@ -3671,7 +3671,7 @@
         operationId: "userCurrentListStarred"
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /user/starred/{owner}/{repo}: 
       get: 
         tags: 
@@ -3693,9 +3693,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
       put: 
         tags: 
           - "user"
@@ -3716,7 +3716,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
       delete: 
         tags: 
           - "user"
@@ -3737,7 +3737,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /user/subscriptions: 
       get: 
         produces: 
@@ -3748,7 +3748,7 @@
         operationId: "userCurrentListSubscriptions"
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /user/times: 
       get: 
         produces: 
@@ -3759,7 +3759,7 @@
         operationId: "userCurrentTrackedTimes"
         responses: 
           200: 
-            $ref: "#/responses/TrackedTimeList"
+            $ref: "#/components/responses/TrackedTimeList"
     /user/{username}/orgs: 
       get: 
         produces: 
@@ -3777,7 +3777,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/OrganizationList"
+            $ref: "#/components/responses/OrganizationList"
     /users/search: 
       get: 
         produces: 
@@ -3799,7 +3799,7 @@
             in: "query"
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /users/{follower}/following/{followee}: 
       get: 
         tags: 
@@ -3821,9 +3821,9 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
     /users/{username}: 
       get: 
         produces: 
@@ -3841,9 +3841,9 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/User"
+            $ref: "#/components/responses/User"
           404: 
-            $ref: "#/responses/notFound"
+            $ref: "#/components/responses/notFound"
     /users/{username}/followers: 
       get: 
         produces: 
@@ -3861,7 +3861,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /users/{username}/following: 
       get: 
         produces: 
@@ -3879,7 +3879,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/UserList"
+            $ref: "#/components/responses/UserList"
     /users/{username}/gpg_keys: 
       get: 
         produces: 
@@ -3897,7 +3897,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/GPGKeyList"
+            $ref: "#/components/responses/GPGKeyList"
     /users/{username}/keys: 
       get: 
         produces: 
@@ -3915,7 +3915,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/PublicKeyList"
+            $ref: "#/components/responses/PublicKeyList"
     /users/{username}/repos: 
       get: 
         produces: 
@@ -3933,7 +3933,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /users/{username}/starred: 
       get: 
         produces: 
@@ -3951,7 +3951,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /users/{username}/subscriptions: 
       get: 
         produces: 
@@ -3969,7 +3969,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/RepositoryList"
+            $ref: "#/components/responses/RepositoryList"
     /users/{username}/tokens: 
       get: 
         produces: 
@@ -3987,7 +3987,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/AccessTokenList"
+            $ref: "#/components/responses/AccessTokenList"
       post: 
         consumes: 
           - "application/json"
@@ -4007,7 +4007,7 @@
             required: true
         responses: 
           200: 
-            $ref: "#/responses/AccessToken"
+            $ref: "#/components/responses/AccessToken"
     /users/{username}/tokens/{token}: 
       delete: 
         produces: 
@@ -4031,7 +4031,7 @@
             required: true
         responses: 
           204: 
-            $ref: "#/responses/empty"
+            $ref: "#/components/responses/empty"
     /version: 
       get: 
         produces: 
@@ -4042,7 +4042,7 @@
         operationId: "getVersion"
         responses: 
           200: 
-            $ref: "#/responses/ServerVersion"
+            $ref: "#/components/responses/ServerVersion"
   definitions: 
     AddCollaboratorOption: 
       description: "AddCollaboratorOption options when adding a user as a collaborator of a repository"
@@ -4099,7 +4099,7 @@
       type: "object"
       properties: 
         commit: 
-          $ref: "#/definitions/PayloadCommit"
+          $ref: "#/components/schemas/PayloadCommit"
         name: 
           type: "string"
           x-go-name: "Name"
@@ -4133,7 +4133,7 @@
           format: "date-time"
           x-go-name: "Updated"
         user: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
       x-go-package: "code.gitea.io/gitea/vendor/code.gitea.io/sdk/gitea"
     CreateEmailOption: 
       description: "CreateEmailOption options when creating email addresses"
@@ -4433,7 +4433,7 @@
           type: "string"
           x-go-name: "Description"
         state: 
-          $ref: "#/definitions/StatusState"
+          $ref: "#/components/schemas/StatusState"
         target_url: 
           type: "string"
           x-go-name: "TargetURL"
@@ -4812,7 +4812,7 @@
         emails: 
           type: "array"
           items: 
-            $ref: "#/definitions/GPGKeyEmail"
+            $ref: "#/components/schemas/GPGKeyEmail"
           x-go-name: "Emails"
         expires_at: 
           type: "string"
@@ -4834,7 +4834,7 @@
         subkeys: 
           type: "array"
           items: 
-            $ref: "#/definitions/GPGKey"
+            $ref: "#/components/schemas/GPGKey"
           x-go-name: "SubsKey"
       x-go-package: "code.gitea.io/gitea/vendor/code.gitea.io/sdk/gitea"
     GPGKeyEmail: 
@@ -4853,11 +4853,11 @@
       type: "object"
       properties: 
         assignee: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
         assignees: 
           type: "array"
           items: 
-            $ref: "#/definitions/User"
+            $ref: "#/components/schemas/User"
           x-go-name: "Assignees"
         body: 
           type: "string"
@@ -4885,18 +4885,18 @@
         labels: 
           type: "array"
           items: 
-            $ref: "#/definitions/Label"
+            $ref: "#/components/schemas/Label"
           x-go-name: "Labels"
         milestone: 
-          $ref: "#/definitions/Milestone"
+          $ref: "#/components/schemas/Milestone"
         number: 
           type: "integer"
           format: "int64"
           x-go-name: "Index"
         pull_request: 
-          $ref: "#/definitions/PullRequestMeta"
+          $ref: "#/components/schemas/PullRequestMeta"
         state: 
-          $ref: "#/definitions/StateType"
+          $ref: "#/components/schemas/StateType"
         title: 
           type: "string"
           x-go-name: "Title"
@@ -4908,7 +4908,7 @@
           type: "string"
           x-go-name: "URL"
         user: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
       x-go-package: "code.gitea.io/gitea/vendor/code.gitea.io/sdk/gitea"
     IssueDeadline: 
       description: "IssueDeadline represents an issue deadline"
@@ -5029,7 +5029,7 @@
           format: "int64"
           x-go-name: "OpenIssues"
         state: 
-          $ref: "#/definitions/StateType"
+          $ref: "#/components/schemas/StateType"
         title: 
           type: "string"
           x-go-name: "Title"
@@ -5072,7 +5072,7 @@
           type: "string"
           x-go-name: "Ref"
         repo: 
-          $ref: "#/definitions/Repository"
+          $ref: "#/components/schemas/Repository"
         repo_id: 
           type: "integer"
           format: "int64"
@@ -5086,9 +5086,9 @@
       type: "object"
       properties: 
         author: 
-          $ref: "#/definitions/PayloadUser"
+          $ref: "#/components/schemas/PayloadUser"
         committer: 
-          $ref: "#/definitions/PayloadUser"
+          $ref: "#/components/schemas/PayloadUser"
         id: 
           description: "sha1 hash of the commit"
           type: "string"
@@ -5104,7 +5104,7 @@
           type: "string"
           x-go-name: "URL"
         verification: 
-          $ref: "#/definitions/PayloadCommitVerification"
+          $ref: "#/components/schemas/PayloadCommitVerification"
       x-go-package: "code.gitea.io/gitea/vendor/code.gitea.io/sdk/gitea"
     PayloadCommitVerification: 
       description: "PayloadCommitVerification represents the GPG verification of a commit"
@@ -5183,14 +5183,14 @@
       type: "object"
       properties: 
         assignee: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
         assignees: 
           type: "array"
           items: 
-            $ref: "#/definitions/User"
+            $ref: "#/components/schemas/User"
           x-go-name: "Assignees"
         base: 
-          $ref: "#/definitions/PRBranchInfo"
+          $ref: "#/components/schemas/PRBranchInfo"
         body: 
           type: "string"
           x-go-name: "Body"
@@ -5214,7 +5214,7 @@
           format: "date-time"
           x-go-name: "Deadline"
         head: 
-          $ref: "#/definitions/PRBranchInfo"
+          $ref: "#/components/schemas/PRBranchInfo"
         html_url: 
           type: "string"
           x-go-name: "HTMLURL"
@@ -5225,7 +5225,7 @@
         labels: 
           type: "array"
           items: 
-            $ref: "#/definitions/Label"
+            $ref: "#/components/schemas/Label"
           x-go-name: "Labels"
         merge_base: 
           type: "string"
@@ -5244,9 +5244,9 @@
           format: "date-time"
           x-go-name: "Merged"
         merged_by: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
         milestone: 
-          $ref: "#/definitions/Milestone"
+          $ref: "#/components/schemas/Milestone"
         number: 
           type: "integer"
           format: "int64"
@@ -5255,7 +5255,7 @@
           type: "string"
           x-go-name: "PatchURL"
         state: 
-          $ref: "#/definitions/StateType"
+          $ref: "#/components/schemas/StateType"
         title: 
           type: "string"
           x-go-name: "Title"
@@ -5267,7 +5267,7 @@
           type: "string"
           x-go-name: "URL"
         user: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
       x-go-package: "code.gitea.io/gitea/vendor/code.gitea.io/sdk/gitea"
     PullRequestMeta: 
       description: "PullRequestMeta PR info if an issue is a PR"
@@ -5288,10 +5288,10 @@
         assets: 
           type: "array"
           items: 
-            $ref: "#/definitions/Attachment"
+            $ref: "#/components/schemas/Attachment"
           x-go-name: "Attachments"
         author: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
         body: 
           type: "string"
           x-go-name: "Note"
@@ -5380,11 +5380,11 @@
           format: "int64"
           x-go-name: "OpenIssues"
         owner: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
         parent: 
-          $ref: "#/definitions/Repository"
+          $ref: "#/components/schemas/Repository"
         permissions: 
-          $ref: "#/definitions/Permission"
+          $ref: "#/components/schemas/Permission"
         private: 
           type: "boolean"
           x-go-name: "Private"
@@ -5418,7 +5418,7 @@
         data: 
           type: "array"
           items: 
-            $ref: "#/definitions/Repository"
+            $ref: "#/components/schemas/Repository"
           x-go-name: "Data"
         ok: 
           type: "boolean"
@@ -5448,7 +5448,7 @@
           format: "date-time"
           x-go-name: "Created"
         creator: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
         description: 
           type: "string"
           x-go-name: "Description"
@@ -5457,7 +5457,7 @@
           format: "int64"
           x-go-name: "ID"
         status: 
-          $ref: "#/definitions/StatusState"
+          $ref: "#/components/schemas/StatusState"
         target_url: 
           type: "string"
           x-go-name: "TargetURL"
@@ -5593,209 +5593,209 @@
     Attachment: 
       description: "Attachment"
       schema: 
-        $ref: "#/definitions/Attachment"
+        $ref: "#/components/schemas/Attachment"
     AttachmentList: 
       description: "AttachmentList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Attachment"
+          $ref: "#/components/schemas/Attachment"
     Branch: 
       description: "Branch"
       schema: 
-        $ref: "#/definitions/Branch"
+        $ref: "#/components/schemas/Branch"
     BranchList: 
       description: "BranchList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Branch"
+          $ref: "#/components/schemas/Branch"
     Comment: 
       description: "Comment"
       schema: 
-        $ref: "#/definitions/Comment"
+        $ref: "#/components/schemas/Comment"
     CommentList: 
       description: "CommentList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Comment"
+          $ref: "#/components/schemas/Comment"
     DeployKey: 
       description: "DeployKey"
       schema: 
-        $ref: "#/definitions/DeployKey"
+        $ref: "#/components/schemas/DeployKey"
     DeployKeyList: 
       description: "DeployKeyList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/DeployKey"
+          $ref: "#/components/schemas/DeployKey"
     EmailList: 
       description: "EmailList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Email"
+          $ref: "#/components/schemas/Email"
     GPGKey: 
       description: "GPGKey"
       schema: 
-        $ref: "#/definitions/GPGKey"
+        $ref: "#/components/schemas/GPGKey"
     GPGKeyList: 
       description: "GPGKeyList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/GPGKey"
+          $ref: "#/components/schemas/GPGKey"
     Hook: 
       description: "Hook"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Branch"
+          $ref: "#/components/schemas/Branch"
     HookList: 
       description: "HookList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Branch"
+          $ref: "#/components/schemas/Branch"
     Issue: 
       description: "Issue"
       schema: 
-        $ref: "#/definitions/Issue"
+        $ref: "#/components/schemas/Issue"
     IssueDeadline: 
       description: "IssueDeadline"
       schema: 
-        $ref: "#/definitions/IssueDeadline"
+        $ref: "#/components/schemas/IssueDeadline"
     IssueList: 
       description: "IssueList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Issue"
+          $ref: "#/components/schemas/Issue"
     Label: 
       description: "Label"
       schema: 
-        $ref: "#/definitions/Label"
+        $ref: "#/components/schemas/Label"
     LabelList: 
       description: "LabelList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Label"
+          $ref: "#/components/schemas/Label"
     MarkdownRender: 
       description: "MarkdownRender is a rendered markdown document"
     Milestone: 
       description: "Milestone"
       schema: 
-        $ref: "#/definitions/Milestone"
+        $ref: "#/components/schemas/Milestone"
     MilestoneList: 
       description: "MilestoneList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Milestone"
+          $ref: "#/components/schemas/Milestone"
     Organization: 
       description: "Organization"
       schema: 
-        $ref: "#/definitions/Organization"
+        $ref: "#/components/schemas/Organization"
     OrganizationList: 
       description: "OrganizationList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Organization"
+          $ref: "#/components/schemas/Organization"
     PublicKey: 
       description: "PublicKey"
       schema: 
-        $ref: "#/definitions/PublicKey"
+        $ref: "#/components/schemas/PublicKey"
     PublicKeyList: 
       description: "PublicKeyList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/PublicKey"
+          $ref: "#/components/schemas/PublicKey"
     PullRequest: 
       description: "PullRequest"
       schema: 
-        $ref: "#/definitions/PullRequest"
+        $ref: "#/components/schemas/PullRequest"
     PullRequestList: 
       description: "PullRequestList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/PullRequest"
+          $ref: "#/components/schemas/PullRequest"
     Release: 
       description: "Release"
       schema: 
-        $ref: "#/definitions/Release"
+        $ref: "#/components/schemas/Release"
     ReleaseList: 
       description: "ReleaseList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Release"
+          $ref: "#/components/schemas/Release"
     Repository: 
       description: "Repository"
       schema: 
-        $ref: "#/definitions/Repository"
+        $ref: "#/components/schemas/Repository"
     RepositoryList: 
       description: "RepositoryList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Repository"
+          $ref: "#/components/schemas/Repository"
     SearchResults: 
       description: "SearchResults"
       schema: 
-        $ref: "#/definitions/SearchResults"
+        $ref: "#/components/schemas/SearchResults"
     ServerVersion: 
       description: "ServerVersion"
       schema: 
-        $ref: "#/definitions/ServerVersion"
+        $ref: "#/components/schemas/ServerVersion"
     Status: 
       description: "Status"
       schema: 
-        $ref: "#/definitions/Status"
+        $ref: "#/components/schemas/Status"
     StatusList: 
       description: "StatusList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Status"
+          $ref: "#/components/schemas/Status"
     Team: 
       description: "Team"
       schema: 
-        $ref: "#/definitions/Team"
+        $ref: "#/components/schemas/Team"
     TeamList: 
       description: "TeamList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/Team"
+          $ref: "#/components/schemas/Team"
     TrackedTime: 
       description: "TrackedTime"
       schema: 
-        $ref: "#/definitions/TrackedTime"
+        $ref: "#/components/schemas/TrackedTime"
     TrackedTimeList: 
       description: "TrackedTimeList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/TrackedTime"
+          $ref: "#/components/schemas/TrackedTime"
     User: 
       description: "User"
       schema: 
-        $ref: "#/definitions/User"
+        $ref: "#/components/schemas/User"
     UserList: 
       description: "UserList"
       schema: 
         type: "array"
         items: 
-          $ref: "#/definitions/User"
+          $ref: "#/components/schemas/User"
     WatchInfo: 
       description: "WatchInfo"
       schema: 
-        $ref: "#/definitions/WatchInfo"
+        $ref: "#/components/schemas/WatchInfo"
     empty: 
       description: "APIEmpty is an empty response"
     error: 
@@ -5817,7 +5817,7 @@
     parameterBodies: 
       description: "parameterBodies"
       schema: 
-        $ref: "#/definitions/EditAttachmentOptions"
+        $ref: "#/components/schemas/EditAttachmentOptions"
     redirect: 
       description: "APIRedirect is a redirect response"
     validationError: 

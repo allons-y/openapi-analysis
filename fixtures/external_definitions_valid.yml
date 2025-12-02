@@ -1,5 +1,5 @@
 ---
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   version: "0.1.0"
   title: reference analysis
@@ -9,23 +9,23 @@ parameters:
     name: someParam
     in: body
     schema:
-      $ref: "external/definitions.yml#/definitions/record"
+      $ref: "external/definitions.yml#/components/schemas/record"
 responses:
   someResponse:
     schema:
-      $ref: "external/definitions.yml#/definitions/record"
+      $ref: "external/definitions.yml#/components/schemas/record"
 paths:
   "/some/where/{id}":
     parameters:
-      - $ref: "external/parameters.yml#/parameters/idParam"
+      - $ref: "external/parameters.yml#/components/parameters/idParam"
 
       - name: bodyId
         in: body
         schema:
-          $ref: "external/definitions.yml#/definitions/record"
+          $ref: "external/definitions.yml#/components/schemas/record"
     get:
       parameters:
-      - $ref: "external/parameters.yml#/parameters/limitParam"
+      - $ref: "external/parameters.yml#/components/parameters/limitParam"
       - name: other
         in: query
         type: array
@@ -35,62 +35,62 @@ paths:
       - name: body
         in: body
         schema:
-          $ref: "external/definitions.yml#/definitions/record"
+          $ref: "external/definitions.yml#/components/schemas/record"
       responses:
         default:
           schema:
-            $ref: "external/definitions.yml#/definitions/record"
+            $ref: "external/definitions.yml#/components/schemas/record"
         404:
-          $ref: "external/responses.yml#/responses/notFound"
+          $ref: "external/responses.yml#/components/responses/notFound"
         200:
           schema:
-            $ref: "external/definitions.yml#/definitions/tag"
+            $ref: "external/definitions.yml#/components/schemas/tag"
   "/other/place":
     $ref: "external/pathItem.yml"
 
 definitions:
   namedAgain:
-    $ref: "external/definitions.yml#/definitions/named"
+    $ref: "external/definitions.yml#/components/schemas/named"
 
   datedTag:
     allOf:
       - type: string
         format: date
-      - $ref: "external/definitions.yml#/definitions/tag"
+      - $ref: "external/definitions.yml#/components/schemas/tag"
   
   records:
     type: array
     items:
-      - $ref: "external/definitions.yml#/definitions/record"
+      - $ref: "external/definitions.yml#/components/schemas/record"
 
   datedRecords:
     type: array
     items:
       - type: string
         format: date-time
-      - $ref: "external/definitions.yml#/definitions/record"
+      - $ref: "external/definitions.yml#/components/schemas/record"
 
   datedTaggedRecords:
     type: array
     items:
       - type: string
         format: date-time
-      - $ref: "external/definitions.yml#/definitions/record"
+      - $ref: "external/definitions.yml#/components/schemas/record"
     additionalItems:
-      $ref: "external/definitions.yml#/definitions/tag"
+      $ref: "external/definitions.yml#/components/schemas/tag"
     
   otherRecords:
     type: array
     items:
-      $ref: "external/definitions.yml#/definitions/record"
+      $ref: "external/definitions.yml#/components/schemas/record"
   
   tags:
     type: object
     additionalProperties:
-      $ref: "external/definitions.yml#/definitions/tag"
+      $ref: "external/definitions.yml#/components/schemas/tag"
 
   namedThing:
     type: object
     properties:
       name:
-        $ref: "external/definitions.yml#/definitions/named"
+        $ref: "external/definitions.yml#/components/schemas/named"

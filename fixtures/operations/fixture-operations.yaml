@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   version: '0.1.0'
   title: operations and operationIDs
@@ -13,7 +13,7 @@ parameters:
     name: some
     in: body
     schema:
-      $ref: '#/definitions/myBody'
+      $ref: '#/components/schemas/myBody'
 
 responses:
   notFound:
@@ -36,63 +36,63 @@ definitions:
 paths:
   /some/where:
     parameters:
-    - $ref: '#/parameters/someParam'
+    - $ref: '#/components/parameters/someParam'
     get:
       operationId: getSomeWhere
       parameters:
-      - $ref: '#/parameters/bodyParam' 
+      - $ref: '#/components/parameters/bodyParam' 
       - name: other
         in: query
         type: string
       responses:
         403:
-          $ref: '#/responses/notFound'
+          $ref: '#/components/responses/notFound'
     post:
       operationId: postSomeWhere
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
   /some/where/else:
     parameters:
-    - $ref: '#/parameters/someParam'
+    - $ref: '#/components/parameters/someParam'
     get:
       operationId: getSomeWhereElse
       parameters:
-      - $ref: '#/parameters/someParam'
+      - $ref: '#/components/parameters/someParam'
       - name: myOtherBodyParam
         in: body
         schema:
-          $ref: '#/definitions/myBody'
+          $ref: '#/components/schemas/myBody'
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
     put:
       operationId: putSomeWhereElse
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
     post:
       operationId: postSomeWhereElse
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
     patch:
       operationId: patchSomeWhereElse
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
     delete:
       operationId: deleteSomeWhereElse
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
     head:
       operationId: headSomeWhereElse
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'
     options:
       operationId: optionsSomeWhereElse
       responses:
         default:
-          $ref: '#/responses/defaultResponse'
+          $ref: '#/components/responses/defaultResponse'

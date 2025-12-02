@@ -1,130 +1,146 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-   "title": "reference analysis",
-   "version": "0.1.0"
+    "title": "reference analysis",
+    "version": "0.1.0"
   },
   "paths": {
-   "/other/place": {
-    "get": {
-     "description": "Used to see if a codegen can render all the possible parameter variations for a header param",
-     "tags": [
-      "testcgen"
-     ],
-     "summary": "many model variations",
-     "operationId": "modelOp",
-     "responses": {
-      "default": {
-       "description": "Generic Out"
+    "/other/place": {
+      "get": {
+        "tags": [
+          "testcgen"
+        ],
+        "summary": "many model variations",
+        "description": "Used to see if a codegen can render all the possible parameter variations for a header param",
+        "operationId": "modelOp",
+        "responses": {
+          "default": {
+            "description": "Generic Out"
+          }
+        }
       }
-     }
-    }
-   },
-   "/some/where/{id}": {
-    "get": {
-     "parameters": [
-      {
-       "type": "integer",
-       "format": "int32",
-       "name": "limit",
-       "in": "query"
-      },
-      {
-       "type": "array",
-       "items": {
-        "type": "string"
-       },
-       "name": "other",
-       "in": "query"
-      },
-      {
-       "name": "body",
-       "in": "body",
-       "schema": {
-        "$ref": "#/definitions/record"
-       }
-      }
-     ],
-     "responses": {
-      "200": {
-			  "description": "",
-       "schema": {
-        "$ref": "#/definitions/tag"
-       }
-      },
-      "404": {
-			  "description": "",
-       "schema": {
-        "$ref": "#/definitions/error"
-       }
-      },
-      "default": {
-			  "description": "",
-       "schema": {
-        "$ref": "#/definitions/record"
-       }
-      }
-     }
     },
-    "parameters": [
-     {
-      "type": "integer",
-      "format": "int32",
-      "name": "id",
-      "in": "path"
-     },
-     {
-      "name": "bodyId",
-      "in": "body",
-      "schema": {
-       "$ref": "#/definitions/record"
+    "/some/where/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      ],
+      "get": {
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "other",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/record"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tag"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/record"
+                }
+              }
+            }
+          }
+        }
       }
-     }
-    ]
-   }
+    }
   },
-  "definitions": {
-   "error": {
-    "type": "object",
-    "required": [
-     "id",
-     "message"
-    ],
-    "properties": {
-     "id": {
-      "type": "integer",
-      "format": "int64",
-      "readOnly": true
-     },
-     "message": {
-      "type": "string",
-      "readOnly": true
-     }
+  "components": {
+    "schemas": {
+      "error": {
+        "type": "object",
+        "required": [
+          "id",
+          "message"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "message": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "record": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "tag": {
+        "type": "object",
+        "properties": {
+          "audit": {
+            "$ref": "#/components/schemas/record"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
     }
-   },
-   "record": {
-    "type": "object",
-    "properties": {
-     "createdAt": {
-      "type": "string",
-      "format": "date-time"
-     }
-    }
-   },
-   "tag": {
-    "type": "object",
-    "properties": {
-     "audit": {
-      "$ref": "#/definitions/record"
-     },
-     "id": {
-      "type": "integer",
-      "format": "int64"
-     },
-     "value": {
-      "type": "string"
-     }
-    }
-   }
   }
 }

@@ -498,9 +498,9 @@ func TestFlattenSchema_UnitGuards(t *testing.T) {
 }
 
 func definitionPtr(key string) string {
-	if !strings.HasPrefix(key, "#/definitions") {
+	if !strings.HasPrefix(key, "#/components/schemas") {
 		return key
 	}
 
-	return strings.Join(strings.Split(key, "/")[:3], "/")
+	return strings.Join(strings.Split(key, "/")[:4], "/")
 }

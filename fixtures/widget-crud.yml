@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   title: widget CRUD API
   version: 4.2.0
@@ -46,7 +46,7 @@ paths:
         '200':
           description: OK
           schema:
-            $ref: "#/definitions/widget"
+            $ref: "#/components/schemas/widget"
 
   /widgets:
     post:
@@ -56,35 +56,35 @@ paths:
         - name: info
           in: body
           schema:
-            $ref: "#/definitions/widget"
+            $ref: "#/components/schemas/widget"
       responses:
         '201':
           description: created
           schema:
-            $ref: "#/definitions/widgetId"
+            $ref: "#/components/schemas/widgetId"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
   /widgets/{widgetid}:
     get:
       operationId: get
       summary: Get a widget by id
       parameters:
-        - $ref: "#/parameters/widgetid"
+        - $ref: "#/components/parameters/widgetid"
       responses:
         '200':
           description: OK
           schema:
-            $ref: "#/definitions/widget"
+            $ref: "#/components/schemas/widget"
         '401':
-          $ref: "#/responses/401"
+          $ref: "#/components/responses/401"
         '404':
-          $ref: "#/responses/404"
+          $ref: "#/components/responses/404"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
     delete:
       operationId: delete
       summary: delete a widget by id
@@ -99,15 +99,15 @@ paths:
         '401':
           description: unauthorized
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         '404':
           description: resource not found
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
     post:
       operationId: update
       summary: update a widget by id
@@ -119,22 +119,22 @@ paths:
         - name: info
           in: body
           schema:
-            $ref: "#/definitions/widget"
+            $ref: "#/components/schemas/widget"
       responses:
         '200':
           description: OK
         '401':
           description: unauthorized
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         '404':
           description: resource not found
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
         default:
           description: error
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/components/schemas/error"
 
 definitions:
   common:
@@ -201,8 +201,8 @@ responses:
   401:
     description: widget unauthorized
     schema:
-      $ref: "#/definitions/error"
+      $ref: "#/components/schemas/error"
   404:
     description: widget resource not found
     schema:
-      $ref: "#/definitions/error"
+      $ref: "#/components/schemas/error"

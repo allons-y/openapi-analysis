@@ -1,66 +1,169 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "NetworkManagementClient",
     "description": "The Microsoft Azure Network management API provides a RESTful set of web services that interact with Microsoft Azure Networks service to manage your network resources. The API has entities that capture the relationship between an end user and the Microsoft Azure Networks service.",
     "version": "2020-04-01"
   },
-  "host": "management.azure.com",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "security": [
+  "servers": [
     {
-      "azure_auth": [
-        "user_impersonation"
-      ]
+      "url": "https://management.azure.com"
     }
   ],
-  "securityDefinitions": {
-    "azure_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/authorize",
-      "flow": "implicit",
-      "description": "Azure Active Directory OAuth2 Flow.",
-      "scopes": {
-        "user_impersonation": "impersonate your user account"
-      }
-    }
-  },
   "paths": {
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/networkProfiles/{networkProfileName}": {
-      "delete": {
+      "get": {
         "tags": [
           "NetworkProfiles"
         ],
-        "operationId": "NetworkProfiles_Delete",
-        "description": "Deletes the specified network profile.",
+        "description": "Gets the specified network profile in a specified resource group.",
+        "operationId": "NetworkProfiles_Get",
         "parameters": [
           {
             "name": "resourceGroupName",
             "in": "path",
+            "description": "The name of the resource group.",
             "required": true,
-            "type": "string",
-            "description": "The name of the resource group."
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "networkProfileName",
             "in": "path",
+            "description": "The name of the public IP prefix.",
             "required": true,
-            "type": "string",
-            "description": "The name of the NetworkProfile."
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "$ref": "./network.json#/parameters/ApiVersionParameter"
+            "name": "$expand",
+            "in": "query",
+            "description": "Expands referenced resources.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful. The operation returns the resulting NetworkProfile resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkProfile"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./network.json#/components/schemas/CloudError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "NetworkProfiles"
+        ],
+        "description": "Creates or updates a network profile.",
+        "operationId": "NetworkProfiles_CreateOrUpdate",
+        "parameters": [
+          {
+            "name": "resourceGroupName",
+            "in": "path",
+            "description": "The name of the resource group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "$ref": "./network.json#/parameters/SubscriptionIdParameter"
+            "name": "networkProfileName",
+            "in": "path",
+            "description": "The name of the network profile.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetworkProfile"
+              }
+            }
+          },
+          "description": "Parameters supplied to the create or update network profile operation."
+        },
+        "responses": {
+          "201": {
+            "description": "Create successful. The operation returns the resulting NetworkProfile resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkProfile"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Update successful. The operation returns the resulting NetworkProfile resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkProfile"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./network.json#/components/schemas/CloudError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "NetworkProfiles"
+        ],
+        "description": "Deletes the specified network profile.",
+        "operationId": "NetworkProfiles_Delete",
+        "parameters": [
+          {
+            "name": "resourceGroupName",
+            "in": "path",
+            "description": "The name of the resource group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "networkProfileName",
+            "in": "path",
+            "description": "The name of the NetworkProfile.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -75,197 +178,73 @@
           },
           "default": {
             "description": "Error response describing why the operation failed.",
-            "schema": {
-              "$ref": "./network.json#/definitions/CloudError"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./network.json#/components/schemas/CloudError"
+                }
+              }
             }
-          }
-        },
-        "x-ms-examples": {
-          "Delete network profile": {
-            "$ref": "./examples/NetworkProfileDelete.json"
-          }
-        },
-        "x-ms-long-running-operation": true,
-        "x-ms-long-running-operation-options": {
-          "final-state-via": "location"
-        }
-      },
-      "get": {
-        "tags": [
-          "NetworkProfiles"
-        ],
-        "operationId": "NetworkProfiles_Get",
-        "description": "Gets the specified network profile in a specified resource group.",
-        "parameters": [
-          {
-            "name": "resourceGroupName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The name of the resource group."
-          },
-          {
-            "name": "networkProfileName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The name of the public IP prefix."
-          },
-          {
-            "$ref": "./network.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "./network.json#/parameters/SubscriptionIdParameter"
-          },
-          {
-            "name": "$expand",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "description": "Expands referenced resources."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Request successful. The operation returns the resulting NetworkProfile resource.",
-            "schema": {
-              "$ref": "#/definitions/NetworkProfile"
-            }
-          },
-          "default": {
-            "description": "Error response describing why the operation failed.",
-            "schema": {
-              "$ref": "./network.json#/definitions/CloudError"
-            }
-          }
-        },
-        "x-ms-examples": {
-          "Get network profile": {
-            "$ref": "./examples/NetworkProfileGetConfigOnly.json"
-          },
-          "Get network profile with container network interfaces": {
-            "$ref": "./examples/NetworkProfileGetWithContainerNic.json"
           }
         }
-      },
-      "put": {
-        "tags": [
-          "NetworkProfiles"
-        ],
-        "operationId": "NetworkProfiles_CreateOrUpdate",
-        "description": "Creates or updates a network profile.",
-        "parameters": [
-          {
-            "name": "resourceGroupName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The name of the resource group."
-          },
-          {
-            "name": "networkProfileName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The name of the network profile."
-          },
-          {
-            "name": "parameters",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/NetworkProfile"
-            },
-            "description": "Parameters supplied to the create or update network profile operation."
-          },
-          {
-            "$ref": "./network.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "./network.json#/parameters/SubscriptionIdParameter"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Create successful. The operation returns the resulting NetworkProfile resource.",
-            "schema": {
-              "$ref": "#/definitions/NetworkProfile"
-            }
-          },
-          "200": {
-            "description": "Update successful. The operation returns the resulting NetworkProfile resource.",
-            "schema": {
-              "$ref": "#/definitions/NetworkProfile"
-            }
-          },
-          "default": {
-            "description": "Error response describing why the operation failed.",
-            "schema": {
-              "$ref": "./network.json#/definitions/CloudError"
-            }
-          }
-        },
-        "x-ms-examples": {
-          "Create network profile defaults": {
-            "$ref": "./examples/NetworkProfileCreateConfigOnly.json"
-          }
-        },
-        "x-ms-long-running-operation": false
       },
       "patch": {
         "tags": [
           "NetworkProfiles"
         ],
-        "operationId": "NetworkProfiles_UpdateTags",
         "description": "Updates network profile tags.",
+        "operationId": "NetworkProfiles_UpdateTags",
         "parameters": [
           {
             "name": "resourceGroupName",
             "in": "path",
+            "description": "The name of the resource group.",
             "required": true,
-            "type": "string",
-            "description": "The name of the resource group."
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "networkProfileName",
             "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The name of the network profile."
-          },
-          {
-            "name": "parameters",
-            "in": "body",
+            "description": "The name of the network profile.",
             "required": true,
             "schema": {
-              "$ref": "./network.json#/definitions/TagsObject"
-            },
-            "description": "Parameters supplied to update network profile tags."
-          },
-          {
-            "$ref": "./network.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "./network.json#/parameters/SubscriptionIdParameter"
+              "type": "string"
+            }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./network.json#/components/schemas/TagsObject"
+              }
+            }
+          },
+          "description": "Parameters supplied to update network profile tags."
+        },
         "responses": {
           "200": {
             "description": "Update successful. The operation returns the resulting NetworkProfile resource.",
-            "schema": {
-              "$ref": "#/definitions/NetworkProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkProfile"
+                }
+              }
             }
           },
           "default": {
             "description": "Error response describing why the operation failed.",
-            "schema": {
-              "$ref": "./network.json#/definitions/CloudError"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./network.json#/components/schemas/CloudError"
+                }
+              }
             }
-          }
-        },
-        "x-ms-examples": {
-          "Update network profile tags": {
-            "$ref": "./examples/NetworkProfileUpdateTags.json"
           }
         }
       }
@@ -275,37 +254,29 @@
         "tags": [
           "NetworkProfiles"
         ],
-        "operationId": "NetworkProfiles_ListAll",
         "description": "Gets all the network profiles in a subscription.",
-        "parameters": [
-          {
-            "$ref": "./network.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "./network.json#/parameters/SubscriptionIdParameter"
-          }
-        ],
+        "operationId": "NetworkProfiles_ListAll",
         "responses": {
           "200": {
             "description": "Request successful. The operation returns a list of NetworkProfile resources.",
-            "schema": {
-              "$ref": "#/definitions/NetworkProfileListResult"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkProfileListResult"
+                }
+              }
             }
           },
           "default": {
             "description": "Error response describing why the operation failed.",
-            "schema": {
-              "$ref": "./network.json#/definitions/CloudError"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./network.json#/components/schemas/CloudError"
+                }
+              }
             }
           }
-        },
-        "x-ms-examples": {
-          "List all network profiles": {
-            "$ref": "./examples/NetworkProfileListAll.json"
-          }
-        },
-        "x-ms-pageable": {
-          "nextLinkName": "nextLink"
         }
       }
     },
@@ -314,309 +285,325 @@
         "tags": [
           "NetworkProfiles"
         ],
-        "operationId": "NetworkProfiles_List",
         "description": "Gets all network profiles in a resource group.",
+        "operationId": "NetworkProfiles_List",
         "parameters": [
           {
             "name": "resourceGroupName",
             "in": "path",
+            "description": "The name of the resource group.",
             "required": true,
-            "type": "string",
-            "description": "The name of the resource group."
-          },
-          {
-            "$ref": "./network.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "./network.json#/parameters/SubscriptionIdParameter"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Request successful. The operation returns a list of NetworkProfile resources.",
-            "schema": {
-              "$ref": "#/definitions/NetworkProfileListResult"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkProfileListResult"
+                }
+              }
             }
           },
           "default": {
             "description": "Error response describing why the operation failed.",
-            "schema": {
-              "$ref": "./network.json#/definitions/CloudError"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./network.json#/components/schemas/CloudError"
+                }
+              }
             }
           }
-        },
-        "x-ms-examples": {
-          "List resource group network profiles": {
-            "$ref": "./examples/NetworkProfileList.json"
-          }
-        },
-        "x-ms-pageable": {
-          "nextLinkName": "nextLink"
         }
       }
     }
   },
-  "definitions": {
-    "NetworkProfilePropertiesFormat": {
-      "properties": {
-        "containerNetworkInterfaces": {
-          "readOnly": true,
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ContainerNetworkInterface"
-          },
-          "description": "List of child container network interfaces."
-        },
-        "containerNetworkInterfaceConfigurations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ContainerNetworkInterfaceConfiguration"
-          },
-          "description": "List of chid container network interface configurations."
-        },
-        "resourceGuid": {
-          "readOnly": true,
-          "type": "string",
-          "description": "The resource GUID property of the network profile resource."
-        },
-        "provisioningState": {
-          "readOnly": true,
-          "$ref": "./network.json#/definitions/ProvisioningState",
-          "description": "The provisioning state of the network profile resource."
-        }
-      },
-      "description": "Network profile properties."
-    },
-    "NetworkProfile": {
-      "properties": {
+  "components": {
+    "schemas": {
+      "NetworkProfilePropertiesFormat": {
         "properties": {
-          "x-ms-client-flatten": true,
-          "$ref": "#/definitions/NetworkProfilePropertiesFormat",
-          "description": "Network profile properties."
-        },
-        "etag": {
-          "readOnly": true,
-          "type": "string",
-          "description": "A unique read-only string that changes whenever the resource is updated."
-        }
-      },
-      "allOf": [
-        {
-          "$ref": "./network.json#/definitions/Resource"
-        }
-      ],
-      "description": "Network profile resource."
-    },
-    "NetworkProfileListResult": {
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/NetworkProfile"
+          "containerNetworkInterfaces": {
+            "readOnly": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContainerNetworkInterface"
+            },
+            "description": "List of child container network interfaces."
           },
-          "description": "A list of network profiles that exist in a resource group."
-        },
-        "nextLink": {
-          "type": "string",
-          "description": "The URL to get the next set of results."
-        }
-      },
-      "description": "Response for ListNetworkProfiles API service call."
-    },
-    "ContainerNetworkInterfacePropertiesFormat": {
-      "properties": {
-        "containerNetworkInterfaceConfiguration": {
-          "readOnly": true,
-          "$ref": "#/definitions/ContainerNetworkInterfaceConfiguration",
-          "description": "Container network interface configuration from which this container network interface is created."
-        },
-        "container": {
-          "$ref": "#/definitions/Container",
-          "description": "Reference to the container to which this container network interface is attached."
-        },
-        "ipConfigurations": {
-          "readOnly": true,
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ContainerNetworkInterfaceIpConfiguration"
+          "containerNetworkInterfaceConfigurations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContainerNetworkInterfaceConfiguration"
+            },
+            "description": "List of chid container network interface configurations."
           },
-          "description": "Reference to the ip configuration on this container nic."
-        },
-        "provisioningState": {
-          "readOnly": true,
-          "$ref": "./network.json#/definitions/ProvisioningState",
-          "description": "The provisioning state of the container network interface resource."
-        }
-      },
-      "description": "Properties of container network interface."
-    },
-    "ContainerNetworkInterface": {
-      "properties": {
-        "properties": {
-          "x-ms-client-flatten": true,
-          "$ref": "#/definitions/ContainerNetworkInterfacePropertiesFormat",
-          "description": "Container network interface properties."
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of the resource. This name can be used to access the resource."
-        },
-        "type": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Sub Resource type."
-        },
-        "etag": {
-          "readOnly": true,
-          "type": "string",
-          "description": "A unique read-only string that changes whenever the resource is updated."
-        }
-      },
-      "allOf": [
-        {
-          "$ref": "./network.json#/definitions/SubResource"
-        }
-      ],
-      "description": "Container network interface child resource."
-    },
-    "ContainerNetworkInterfaceConfigurationPropertiesFormat": {
-      "properties": {
-        "ipConfigurations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IPConfigurationProfile"
+          "resourceGuid": {
+            "readOnly": true,
+            "type": "string",
+            "description": "The resource GUID property of the network profile resource."
           },
-          "description": "A list of ip configurations of the container network interface configuration."
+          "provisioningState": {
+            "readOnly": true,
+            "$ref": "./network.json#/components/schemas/ProvisioningState",
+            "description": "The provisioning state of the network profile resource."
+          }
         },
-        "containerNetworkInterfaces": {
-          "type": "array",
-          "items": {
-            "$ref": "./network.json#/definitions/SubResource"
+        "description": "Network profile properties."
+      },
+      "NetworkProfile": {
+        "properties": {
+          "properties": {
+            "x-ms-client-flatten": true,
+            "$ref": "#/components/schemas/NetworkProfilePropertiesFormat",
+            "description": "Network profile properties."
           },
-          "description": "A list of container network interfaces created from this container network interface configuration."
+          "etag": {
+            "readOnly": true,
+            "type": "string",
+            "description": "A unique read-only string that changes whenever the resource is updated."
+          }
         },
-        "provisioningState": {
-          "readOnly": true,
-          "$ref": "./network.json#/definitions/ProvisioningState",
-          "description": "The provisioning state of the container network interface configuration resource."
-        }
+        "allOf": [
+          {
+            "$ref": "./network.json#/components/schemas/Resource"
+          }
+        ],
+        "description": "Network profile resource."
       },
-      "description": "Container network interface configuration properties."
-    },
-    "ContainerNetworkInterfaceConfiguration": {
-      "properties": {
+      "NetworkProfileListResult": {
         "properties": {
-          "x-ms-client-flatten": true,
-          "$ref": "#/definitions/ContainerNetworkInterfaceConfigurationPropertiesFormat",
-          "description": "Container network interface configuration properties."
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkProfile"
+            },
+            "description": "A list of network profiles that exist in a resource group."
+          },
+          "nextLink": {
+            "type": "string",
+            "description": "The URL to get the next set of results."
+          }
         },
-        "name": {
-          "type": "string",
-          "description": "The name of the resource. This name can be used to access the resource."
-        },
-        "type": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Sub Resource type."
-        },
-        "etag": {
-          "readOnly": true,
-          "type": "string",
-          "description": "A unique read-only string that changes whenever the resource is updated."
-        }
+        "description": "Response for ListNetworkProfiles API service call."
       },
-      "allOf": [
-        {
-          "$ref": "./network.json#/definitions/SubResource"
-        }
-      ],
-      "description": "Container network interface configuration child resource."
-    },
-    "IPConfigurationProfilePropertiesFormat": {
-      "properties": {
-        "subnet": {
-          "$ref": "./virtualNetwork.json#/definitions/Subnet",
-          "description": "The reference to the subnet resource to create a container network interface ip configuration."
-        },
-        "provisioningState": {
-          "readOnly": true,
-          "$ref": "./network.json#/definitions/ProvisioningState",
-          "description": "The provisioning state of the IP configuration profile resource."
-        }
-      },
-      "description": "IP configuration profile properties."
-    },
-    "IPConfigurationProfile": {
-      "properties": {
+      "ContainerNetworkInterfacePropertiesFormat": {
         "properties": {
-          "x-ms-client-flatten": true,
-          "$ref": "#/definitions/IPConfigurationProfilePropertiesFormat",
-          "description": "Properties of the IP configuration profile."
+          "containerNetworkInterfaceConfiguration": {
+            "readOnly": true,
+            "$ref": "#/components/schemas/ContainerNetworkInterfaceConfiguration",
+            "description": "Container network interface configuration from which this container network interface is created."
+          },
+          "container": {
+            "$ref": "#/components/schemas/Container",
+            "description": "Reference to the container to which this container network interface is attached."
+          },
+          "ipConfigurations": {
+            "readOnly": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContainerNetworkInterfaceIpConfiguration"
+            },
+            "description": "Reference to the ip configuration on this container nic."
+          },
+          "provisioningState": {
+            "readOnly": true,
+            "$ref": "./network.json#/components/schemas/ProvisioningState",
+            "description": "The provisioning state of the container network interface resource."
+          }
         },
-        "name": {
-          "type": "string",
-          "description": "The name of the resource. This name can be used to access the resource."
-        },
-        "type": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Sub Resource type."
-        },
-        "etag": {
-          "readOnly": true,
-          "type": "string",
-          "description": "A unique read-only string that changes whenever the resource is updated."
-        }
+        "description": "Properties of container network interface."
       },
-      "allOf": [
-        {
-          "$ref": "./network.json#/definitions/SubResource"
-        }
-      ],
-      "description": "IP configuration profile child resource."
-    },
-    "Container": {
-      "properties": {},
-      "allOf": [
-        {
-          "$ref": "./network.json#/definitions/SubResource"
-        }
-      ],
-      "description": "Reference to container resource in remote resource provider."
-    },
-    "ContainerNetworkInterfaceIpConfigurationPropertiesFormat": {
-      "properties": {
-        "provisioningState": {
-          "readOnly": true,
-          "$ref": "./network.json#/definitions/ProvisioningState",
-          "description": "The provisioning state of the container network interface IP configuration resource."
-        }
-      },
-      "description": "Properties of the container network interface IP configuration."
-    },
-    "ContainerNetworkInterfaceIpConfiguration": {
-      "properties": {
+      "ContainerNetworkInterface": {
         "properties": {
-          "x-ms-client-flatten": true,
-          "$ref": "#/definitions/ContainerNetworkInterfaceIpConfigurationPropertiesFormat",
-          "description": "Properties of the container network interface IP configuration."
+          "properties": {
+            "x-ms-client-flatten": true,
+            "$ref": "#/components/schemas/ContainerNetworkInterfacePropertiesFormat",
+            "description": "Container network interface properties."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the resource. This name can be used to access the resource."
+          },
+          "type": {
+            "readOnly": true,
+            "type": "string",
+            "description": "Sub Resource type."
+          },
+          "etag": {
+            "readOnly": true,
+            "type": "string",
+            "description": "A unique read-only string that changes whenever the resource is updated."
+          }
         },
-        "name": {
-          "type": "string",
-          "description": "The name of the resource. This name can be used to access the resource."
-        },
-        "type": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Sub Resource type."
-        },
-        "etag": {
-          "readOnly": true,
-          "type": "string",
-          "description": "A unique read-only string that changes whenever the resource is updated."
-        }
+        "allOf": [
+          {
+            "$ref": "./network.json#/components/schemas/SubResource"
+          }
+        ],
+        "description": "Container network interface child resource."
       },
-      "description": "The ip configuration for a container network interface."
+      "ContainerNetworkInterfaceConfigurationPropertiesFormat": {
+        "properties": {
+          "ipConfigurations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IPConfigurationProfile"
+            },
+            "description": "A list of ip configurations of the container network interface configuration."
+          },
+          "containerNetworkInterfaces": {
+            "type": "array",
+            "items": {
+              "$ref": "./network.json#/components/schemas/SubResource"
+            },
+            "description": "A list of container network interfaces created from this container network interface configuration."
+          },
+          "provisioningState": {
+            "readOnly": true,
+            "$ref": "./network.json#/components/schemas/ProvisioningState",
+            "description": "The provisioning state of the container network interface configuration resource."
+          }
+        },
+        "description": "Container network interface configuration properties."
+      },
+      "ContainerNetworkInterfaceConfiguration": {
+        "properties": {
+          "properties": {
+            "x-ms-client-flatten": true,
+            "$ref": "#/components/schemas/ContainerNetworkInterfaceConfigurationPropertiesFormat",
+            "description": "Container network interface configuration properties."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the resource. This name can be used to access the resource."
+          },
+          "type": {
+            "readOnly": true,
+            "type": "string",
+            "description": "Sub Resource type."
+          },
+          "etag": {
+            "readOnly": true,
+            "type": "string",
+            "description": "A unique read-only string that changes whenever the resource is updated."
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "./network.json#/components/schemas/SubResource"
+          }
+        ],
+        "description": "Container network interface configuration child resource."
+      },
+      "IPConfigurationProfilePropertiesFormat": {
+        "properties": {
+          "subnet": {
+            "$ref": "./virtualNetwork.json#/components/schemas/Subnet",
+            "description": "The reference to the subnet resource to create a container network interface ip configuration."
+          },
+          "provisioningState": {
+            "readOnly": true,
+            "$ref": "./network.json#/components/schemas/ProvisioningState",
+            "description": "The provisioning state of the IP configuration profile resource."
+          }
+        },
+        "description": "IP configuration profile properties."
+      },
+      "IPConfigurationProfile": {
+        "properties": {
+          "properties": {
+            "x-ms-client-flatten": true,
+            "$ref": "#/components/schemas/IPConfigurationProfilePropertiesFormat",
+            "description": "Properties of the IP configuration profile."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the resource. This name can be used to access the resource."
+          },
+          "type": {
+            "readOnly": true,
+            "type": "string",
+            "description": "Sub Resource type."
+          },
+          "etag": {
+            "readOnly": true,
+            "type": "string",
+            "description": "A unique read-only string that changes whenever the resource is updated."
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "./network.json#/components/schemas/SubResource"
+          }
+        ],
+        "description": "IP configuration profile child resource."
+      },
+      "Container": {
+        "properties": {},
+        "allOf": [
+          {
+            "$ref": "./network.json#/components/schemas/SubResource"
+          }
+        ],
+        "description": "Reference to container resource in remote resource provider."
+      },
+      "ContainerNetworkInterfaceIpConfigurationPropertiesFormat": {
+        "properties": {
+          "provisioningState": {
+            "readOnly": true,
+            "$ref": "./network.json#/components/schemas/ProvisioningState",
+            "description": "The provisioning state of the container network interface IP configuration resource."
+          }
+        },
+        "description": "Properties of the container network interface IP configuration."
+      },
+      "ContainerNetworkInterfaceIpConfiguration": {
+        "properties": {
+          "properties": {
+            "x-ms-client-flatten": true,
+            "$ref": "#/components/schemas/ContainerNetworkInterfaceIpConfigurationPropertiesFormat",
+            "description": "Properties of the container network interface IP configuration."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the resource. This name can be used to access the resource."
+          },
+          "type": {
+            "readOnly": true,
+            "type": "string",
+            "description": "Sub Resource type."
+          },
+          "etag": {
+            "readOnly": true,
+            "type": "string",
+            "description": "A unique read-only string that changes whenever the resource is updated."
+          }
+        },
+        "description": "The ip configuration for a container network interface."
+      }
+    },
+    "securitySchemes": {
+      "azure_auth": {
+        "type": "oauth2",
+        "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/authorize",
+        "flow": "implicit",
+        "description": "Azure Active Directory OAuth2 Flow.",
+        "scopes": {
+          "user_impersonation": "impersonate your user account"
+        }
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "azure_auth": [
+        "user_impersonation"
+      ]
+    }
+  ]
 }

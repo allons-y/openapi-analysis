@@ -208,11 +208,13 @@ func (s *Spec) SecurityRequirementsFor(operation *spec.Operation) [][]SecurityRe
 func (s *Spec) SecurityDefinitionsForRequirements(requirements []SecurityRequirement) map[string]spec.SecurityScheme {
 	result := make(map[string]spec.SecurityScheme)
 
+	if s.spec.Components == nil {
+		return result
+	}
+
 	for _, v := range requirements {
-		if definition, ok := s.spec.SecurityDefinitions[v.Name]; ok {
-			if definition != nil {
-				result[v.Name] = *definition
-			}
+		if definition, ok := s.spec.Components.SecuritySchemes[v.Name]; ok {
+			result[v.Name] = definition
 		}
 	}
 
@@ -239,9 +241,9 @@ func (s *Spec) SecurityDefinitionsFor(operation *spec.Operation) map[string]spec
 				continue
 			}
 
-			if definition, ok := s.spec.SecurityDefinitions[v.Name]; ok {
-				if definition != nil {
-					result[v.Name] = *definition
+			if s.spec.Components != nil {
+				if definition, ok := s.spec.Components.SecuritySchemes[v.Name]; ok {
+					result[v.Name] = definition
 				}
 			}
 		}
@@ -751,22 +753,54 @@ func (s *Spec) initialize() {
 		s.analyzeOperations(path, &pathItem) //#nosec
 	}
 
-	for name, parameter := range s.spec.Parameters {
-		refPref := slashpath.Join("/parameters", jsonpointer.Escape(name))
-		if parameter.Items != nil {
-			s.analyzeItems("items", parameter.Items, refPref, "parameter")
+	// Handle OpenAPI 3.x Components
+	if s.spec.Components != nil {
+		for name, parameter := range s.spec.Components.Parameters {
+			refPref := slashpath.Join("/components/parameters", jsonpointer.Escape(name))
+			if parameter.Schema != nil {
+				s.analyzeSchema("schema", parameter.Schema, refPref)
+			}
 		}
-		if parameter.In == "body" && parameter.Schema != nil {
-			s.analyzeSchema("schema", parameter.Schema, refPref)
+
+		for name, response := range s.spec.Components.Responses {
+			refPref := slashpath.Join("/components/responses", jsonpointer.Escape(name))
+			for k, v := range response.Headers {
+				hRefPref := slashpath.Join(refPref, "headers", k)
+				if v.Items != nil {
+					s.analyzeItems("items", v.Items, hRefPref, "header")
+				}
+			}
+			if response.Content != nil {
+				for mediaType, mediaTypeObj := range response.Content {
+					mtRefPref := slashpath.Join(refPref, "content", mediaType)
+					if mediaTypeObj.Schema != nil {
+						s.analyzeSchema("schema", mediaTypeObj.Schema, mtRefPref)
+					}
+				}
+			}
 		}
-		if parameter.Pattern != "" {
-			s.patterns.addParameterPattern(refPref, parameter.Pattern)
-		}
-		if len(parameter.Enum) > 0 {
-			s.enums.addParameterEnum(refPref, parameter.Enum)
+
+		for name := range s.spec.Components.Schemas {
+			schema := s.spec.Components.Schemas[name]
+			s.analyzeSchema(name, &schema, "/components/schemas")
 		}
 	}
 
+	// Handle Swagger 2.0 definitions (backward compatibility)
+	for name := range s.spec.Definitions {
+		schema := s.spec.Definitions[name]
+		s.analyzeSchema(name, &schema, "/definitions")
+	}
+
+	// Handle Swagger 2.0 parameters (backward compatibility)
+	for name, parameter := range s.spec.Parameters {
+		refPref := slashpath.Join("/parameters", jsonpointer.Escape(name))
+		if parameter.Schema != nil {
+			s.analyzeSchema("schema", parameter.Schema, refPref)
+		}
+	}
+
+	// Handle Swagger 2.0 responses (backward compatibility)
 	for name, response := range s.spec.Responses {
 		refPref := slashpath.Join("/responses", jsonpointer.Escape(name))
 		for k, v := range response.Headers {
@@ -774,21 +808,11 @@ func (s *Spec) initialize() {
 			if v.Items != nil {
 				s.analyzeItems("items", v.Items, hRefPref, "header")
 			}
-			if v.Pattern != "" {
-				s.patterns.addHeaderPattern(hRefPref, v.Pattern)
-			}
-			if len(v.Enum) > 0 {
-				s.enums.addHeaderEnum(hRefPref, v.Enum)
-			}
 		}
+		// Swagger 2.0: response schema is directly on the response object
 		if response.Schema != nil {
 			s.analyzeSchema("schema", response.Schema, refPref)
 		}
-	}
-
-	for name := range s.spec.Definitions {
-		schema := s.spec.Definitions[name]
-		s.analyzeSchema(name, &schema, "/definitions")
 	}
 	// TODO: after analyzing all things and flattening schemas etc
 	// resolve all the collected references to their final representations
@@ -814,15 +838,6 @@ func (s *Spec) analyzeOperations(path string, pi *spec.PathItem) {
 		refPref := slashpath.Join("/paths", jsonpointer.Escape(path), "parameters", strconv.Itoa(i))
 		if param.Ref.String() != "" {
 			s.references.addParamRef(refPref, &param) //#nosec
-		}
-		if param.Pattern != "" {
-			s.patterns.addParameterPattern(refPref, param.Pattern)
-		}
-		if len(param.Enum) > 0 {
-			s.enums.addParameterEnum(refPref, param.Enum)
-		}
-		if param.Items != nil {
-			s.analyzeItems("items", param.Items, refPref, "parameter")
 		}
 		if param.Schema != nil {
 			s.analyzeSchema("schema", param.Schema, refPref)
@@ -853,16 +868,8 @@ func (s *Spec) analyzeParameter(prefix string, i int, param spec.Parameter) {
 		s.references.addParamRef(refPref, &param) //#nosec
 	}
 
-	if param.Pattern != "" {
-		s.patterns.addParameterPattern(refPref, param.Pattern)
-	}
-
-	if len(param.Enum) > 0 {
-		s.enums.addParameterEnum(refPref, param.Enum)
-	}
-
-	s.analyzeItems("items", param.Items, refPref, "parameter")
-	if param.In == "body" && param.Schema != nil {
+	// OpenAPI 3: parameters use schema instead of type/format
+	if param.Schema != nil {
 		s.analyzeSchema("schema", param.Schema, refPref)
 	}
 }
@@ -870,14 +877,6 @@ func (s *Spec) analyzeParameter(prefix string, i int, param spec.Parameter) {
 func (s *Spec) analyzeOperation(method, path string, op *spec.Operation) {
 	if op == nil {
 		return
-	}
-
-	for _, c := range op.Consumes {
-		s.consumes[c] = struct{}{}
-	}
-
-	for _, c := range op.Produces {
-		s.produces[c] = struct{}{}
 	}
 
 	for _, ss := range op.Security {
@@ -894,6 +893,19 @@ func (s *Spec) analyzeOperation(method, path string, op *spec.Operation) {
 	prefix := slashpath.Join("/paths", jsonpointer.Escape(path), strings.ToLower(method))
 	for i, param := range op.Parameters {
 		s.analyzeParameter(prefix, i, param)
+	}
+
+	// OpenAPI 3: analyze request body
+	if op.RequestBody != nil {
+		rbRefPref := slashpath.Join(prefix, "requestBody")
+		if op.RequestBody.Content != nil {
+			for mediaType, mediaTypeObj := range op.RequestBody.Content {
+				mtRefPref := slashpath.Join(rbRefPref, "content", mediaType)
+				if mediaTypeObj.Schema != nil {
+					s.analyzeSchema("schema", mediaTypeObj.Schema, mtRefPref)
+				}
+			}
+		}
 	}
 
 	if op.Responses == nil {
@@ -918,13 +930,21 @@ func (s *Spec) analyzeDefaultResponse(prefix string, res *spec.Response) {
 	for k, v := range res.Headers {
 		hRefPref := slashpath.Join(refPref, "headers", k)
 		s.analyzeItems("items", v.Items, hRefPref, "header")
-		if v.Pattern != "" {
-			s.patterns.addHeaderPattern(hRefPref, v.Pattern)
-		}
 	}
 
+	// Swagger 2.0: response schema is directly on the response object
 	if res.Schema != nil {
 		s.analyzeSchema("schema", res.Schema, refPref)
+	}
+
+	// OpenAPI 3: response content is in content map with media types
+	if res.Content != nil {
+		for mediaType, mediaTypeObj := range res.Content {
+			mtRefPref := slashpath.Join(refPref, "content", mediaType)
+			if mediaTypeObj.Schema != nil {
+				s.analyzeSchema("schema", mediaTypeObj.Schema, mtRefPref)
+			}
+		}
 	}
 }
 
@@ -937,17 +957,21 @@ func (s *Spec) analyzeResponse(prefix string, k int, res spec.Response) {
 	for k, v := range res.Headers {
 		hRefPref := slashpath.Join(refPref, "headers", k)
 		s.analyzeItems("items", v.Items, hRefPref, "header")
-		if v.Pattern != "" {
-			s.patterns.addHeaderPattern(hRefPref, v.Pattern)
-		}
-
-		if len(v.Enum) > 0 {
-			s.enums.addHeaderEnum(hRefPref, v.Enum)
-		}
 	}
 
+	// Swagger 2.0: response schema is directly on the response object
 	if res.Schema != nil {
 		s.analyzeSchema("schema", res.Schema, refPref)
+	}
+
+	// OpenAPI 3: response content is in content map with media types
+	if res.Content != nil {
+		for mediaType, mediaTypeObj := range res.Content {
+			mtRefPref := slashpath.Join(refPref, "content", mediaType)
+			if mediaTypeObj.Schema != nil {
+				s.analyzeSchema("schema", mediaTypeObj.Schema, mtRefPref)
+			}
+		}
 	}
 }
 
@@ -957,7 +981,7 @@ func (s *Spec) analyzeSchema(name string, schema *spec.Schema, prefix string) {
 		Name:     name,
 		Schema:   schema,
 		Ref:      spec.MustCreateRef("#" + refURI),
-		TopLevel: prefix == "/definitions",
+		TopLevel: prefix == "/components/schemas" || prefix == "/definitions",
 	}
 
 	s.allSchemas["#"+refURI] = schRef
@@ -985,7 +1009,9 @@ func (s *Spec) analyzeSchema(name string, schema *spec.Schema, prefix string) {
 	for k, v := range schema.PatternProperties {
 		// NOTE: swagger 2.0 does not support PatternProperties.
 		// However it is possible to analyze this in a schema
-		s.analyzeSchema(k, &v, slashpath.Join(refURI, "patternProperties"))
+		if v.Schema != nil {
+			s.analyzeSchema(k, v.Schema, slashpath.Join(refURI, "patternProperties"))
+		}
 	}
 
 	for i := range schema.AllOf {

@@ -1,14 +1,5 @@
 {
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "schemes": [
-    "http"
-  ],
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "description": "recursively following JSON references",
     "title": "test 1",
@@ -21,70 +12,85 @@
     "/getAll": {
       "get": {
         "operationId": "getAll",
-        "parameters": [
-          {
-            "description": "max number of results",
-            "name": "a",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/a"
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/a"
+              }
             }
-          }
-        ],
+          },
+          "description": "max number of results"
+        },
         "responses": {
           "200": {
             "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/b1"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/b1"
+                }
+              }
             }
           },
           "201": {
             "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/b2"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/b2"
+                }
+              }
             }
           },
           "203": {
             "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/b3"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/b3"
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "definitions": {
-    "a": {
-      "type": "string"
-    },
-    "b1": {
-      "$ref": "#/definitions/b1OAIGen"
-    },
-    "b1OAIGen": {
-      "type": "array",
-      "items": {
+  "components": {
+    "schemas": {
+      "a": {
         "type": "string"
-      }
-    },
-    "b2": {
-      "$ref": "#/definitions/b2OAIGen"
-    },
-    "b2OAIGen": {
-      "type": "object",
-      "properties": {
-        "x2": {
+      },
+      "b1": {
+        "$ref": "#/components/schemas/b1OAIGen"
+      },
+      "b1OAIGen": {
+        "type": "array",
+        "items": {
           "type": "string"
         }
-      }
-    },
-    "b3": {
-      "$ref": "#/definitions/b3OAIGen"
-    },
-    "b3OAIGen": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
+      },
+      "b2": {
+        "$ref": "#/components/schemas/b2OAIGen"
+      },
+      "b2OAIGen": {
+        "type": "object",
+        "properties": {
+          "x2": {
+            "type": "string"
+          }
+        }
+      },
+      "b3": {
+        "$ref": "#/components/schemas/b3OAIGen"
+      },
+      "b3OAIGen": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
       }
     }
   }

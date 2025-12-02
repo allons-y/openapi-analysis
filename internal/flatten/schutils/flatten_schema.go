@@ -12,17 +12,21 @@ import (
 
 const allocLargeMap = 150
 
-// Save registers a schema as an entry in spec #/definitions
+// Save registers a schema as an entry in spec #/components/schemas
 func Save(sp *spec.Swagger, name string, schema *spec.Schema) {
 	if schema == nil {
 		return
 	}
 
-	if sp.Definitions == nil {
-		sp.Definitions = make(map[string]spec.Schema, allocLargeMap)
+	if sp.Components == nil {
+		sp.Components = &spec.Components{}
 	}
 
-	sp.Definitions[name] = *schema
+	if sp.Components.Schemas == nil {
+		sp.Components.Schemas = make(map[string]spec.Schema, allocLargeMap)
+	}
+
+	sp.Components.Schemas[name] = *schema
 }
 
 // Clone deep-clones a schema

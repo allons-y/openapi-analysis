@@ -1,48 +1,27 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "keptn api",
     "version": "0.1.0"
   },
-  "schemes": [
-    "http"
-  ],
-  "basePath": "/",
-  "consumes": [
-    "application/cloudevents+json"
-  ],
-  "produces": [
-    "application/cloudevents+json"
-  ],
-  "securityDefinitions": {
-    "key": {
-      "type": "apiKey",
-      "in": "header",
-      "name": "x-token"
-    }
-  },
-  "security": [
-    {
-      "key": []
-    }
-  ],
   "paths": {
     "/auth": {
       "post": {
         "tags": [
           "auth"
         ],
-        "operationId": "auth",
         "summary": "Checks the provided token",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/definitions/event"
+        "operationId": "auth",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/components/schemas/event"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "authenticated"
@@ -55,28 +34,37 @@
         "tags": [
           "event"
         ],
-        "operationId": "sendEvent",
         "summary": "Forwards the received event to the eventbroker",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/KeptnContextExtendedCE"
+        "operationId": "sendEvent",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeptnContextExtendedCE"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "forwarded",
-            "schema" : {
-              "$ref" : "#/definitions/ChannelInfo"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelInfo"
+                }
+              }
             }
           },
           "default": {
             "description": "error",
-            "schema": {
-              "$ref": "#/definitions/error"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
             }
           }
         }
@@ -87,28 +75,37 @@
         "tags": [
           "configure"
         ],
-        "operationId": "configure",
         "summary": "Forwards the received configure event to the eventbroker",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ConfigureCE"
+        "operationId": "configure",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigureCE"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "configured",
-            "schema" : {
-              "$ref" : "#/definitions/ChannelInfo"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelInfo"
+                }
+              }
             }
           },
           "default": {
             "description": "error",
-            "schema": {
-              "$ref": "#/definitions/error"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
             }
           }
         }
@@ -119,28 +116,37 @@
         "tags": [
           "project"
         ],
-        "operationId": "project",
         "summary": "Forwards the received project event to the eventbroker",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/CreateProjectCE"
+        "operationId": "project",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectCE"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "project created",
-            "schema" : {
-              "$ref" : "#/definitions/ChannelInfo"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelInfo"
+                }
+              }
             }
           },
           "default": {
             "description": "error",
-            "schema": {
-              "$ref": "#/definitions/error"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
             }
           }
         }
@@ -151,241 +157,260 @@
         "tags": [
           "dynatrace"
         ],
-        "operationId": "dynatrace",
         "summary": "Forwards the received event from Dynatrace to the eventbroker",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/DynatraceProblemCE"
+        "operationId": "dynatrace",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DynatraceProblemCE"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "event forwarded"
           },
           "default": {
             "description": "error",
-            "schema": {
-              "$ref": "#/definitions/error"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "definitions": {
-    "KeptnContextExtendedCE": {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/definitions/event"
-        },
-        {
-          "type": "object",
-          "required": [
-            "shkeptncontext"
-          ],
-          "properties": {
-            "shkeptncontext": {
-              "type": "string"
+  "components": {
+    "schemas": {
+      "KeptnContextExtendedCE": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/components/schemas/event"
+          },
+          {
+            "type": "object",
+            "required": [
+              "shkeptncontext"
+            ],
+            "properties": {
+              "shkeptncontext": {
+                "type": "string"
+              }
             }
           }
-        }
-      ]
-    },
-    "ConfigureCE": {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/definitions/event"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "data": {
-              "required": [
-                "org",
-                "user",
-                "token"
-              ],
-              "properties": {
-                "org": {
-                  "type": "string"
-                },
-                "user": {
-                  "type": "string"
-                },
-                "token": {
-                  "type": "string"
+        ]
+      },
+      "ConfigureCE": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/components/schemas/event"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "required": [
+                  "org",
+                  "user",
+                  "token"
+                ],
+                "properties": {
+                  "org": {
+                    "type": "string"
+                  },
+                  "user": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
-        }
-      ]
-    },
-    "DynatraceProblemCE": {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/definitions/event"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "data": {
-              "required": [
-                "state",
-                "problemid",
-                "pid",
-                "problemtitle",
-                "problemdetails",
-                "impactedentities",
-                "impactedentity"
-              ],
-              "properties": {
-                "state": {
-                  "type": "string"
-                },
-                "problemid": {
-                  "type": "string"
-                },
-                "pid": {
-                  "type": "string"
-                },
-                "problemtitle": {
-                  "type": "string"
-                },
-                "problemdetails": {
-                  "required": [
-                    "id"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "impactedentities": {
-                  "type": "array",
-                  "items": {
+        ]
+      },
+      "DynatraceProblemCE": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/components/schemas/event"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "required": [
+                  "state",
+                  "problemid",
+                  "pid",
+                  "problemtitle",
+                  "problemdetails",
+                  "impactedentities",
+                  "impactedentity"
+                ],
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "problemid": {
+                    "type": "string"
+                  },
+                  "pid": {
+                    "type": "string"
+                  },
+                  "problemtitle": {
+                    "type": "string"
+                  },
+                  "problemdetails": {
                     "required": [
-                      "type",
-                      "name",
-                      "entity"
+                      "id"
                     ],
                     "properties": {
-                      "type": {
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "impactedentities": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "type",
+                        "name",
+                        "entity"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "entity": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "impactedentity": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CreateProjectCE": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/components/schemas/event"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "required": [
+                  "project",
+                  "stages"
+                ],
+                "properties": {
+                  "project": {
+                    "type": "string"
+                  },
+                  "stages": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "name",
+                        "deployment_strategy"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "deployment_strategy": {
+                          "type": "string"
+                        },
+                        "test_strategy": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "error": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "message": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "string"
+          }
+        }
+      },
+      "ChannelInfo": {
+        "allOf": [
+          {
+            "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/components/schemas/event"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "properties": {
+                  "channelInfo": {
+                    "required": [
+                      "token",
+                      "channelID"
+                    ],
+                    "properties": {
+                      "token": {
                         "type": "string"
                       },
-                      "name": {
-                        "type": "string"
-                      },
-                      "entity": {
+                      "channelID": {
                         "type": "string"
                       }
                     }
                   }
-                },
-                "impactedentity": {
-                  "type": "string"
                 }
               }
             }
           }
-        }
-      ]
-    },
-    "CreateProjectCE": {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/definitions/event"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "data": {
-              "required": [
-                "project",
-                "stages"
-              ],
-              "properties": {
-                "project": {
-                  "type": "string"
-                },
-                "stages": {
-                  "type": "array",
-                  "items": {
-                    "required": [
-                      "name",
-                      "deployment_strategy"
-                    ],
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "deployment_strategy": {
-                        "type": "string"
-                      },
-                      "test_strategy": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "error": {
-      "type": "object",
-      "required": [
-        "message"
-      ],
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "message": {
-          "type": "string"
-        },
-        "fields": {
-          "type": "string"
-        }
+        ]
       }
     },
-    "ChannelInfo" : {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/cloudevents/spec/v0.2/spec.json#/definitions/event"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "data": {
-              "properties": {
-                "channelInfo": {
-                  "required": [
-                    "token",
-                    "channelID"
-                  ],
-                  "properties": {
-                    "token": {
-                      "type": "string"
-                    },
-                    "channelID": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
+    "securitySchemes": {
+      "key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-token"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "key": []
+    }
+  ]
 }

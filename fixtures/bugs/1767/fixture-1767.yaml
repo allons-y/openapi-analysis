@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   version: "1.0.0"
   title: FHIR API
@@ -21,7 +21,7 @@ parameters:
 paths:
   /Patient/{patientID}:
     parameters:
-    - $ref: "#/parameters/patientID"
+    - $ref: "#/components/parameters/patientID"
     get:
       tags:
       - fhir
@@ -31,7 +31,7 @@ paths:
       - application/fhir+json
       responses:
         200:
-          $ref: "#/responses/Patient"
+          $ref: "#/components/responses/Patient"
     put:
       tags:
       - fhir
@@ -41,7 +41,7 @@ paths:
       - application/fhir+json
       responses:
         200:
-          $ref: "#/responses/Patient"
+          $ref: "#/components/responses/Patient"
 
 responses:
   Patient:

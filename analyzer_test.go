@@ -354,10 +354,15 @@ func TestAnalyzer_PatternAnalysis(t *testing.T) {
 	}
 
 	// patternProperties (beyond Swagger 2.0)
-	_, ok := an.spec.Definitions["withPatternProperties"]
-	assert.True(t, ok)
+	var withPatternProps spec.Schema
+	if an.spec.Components != nil {
+		var ok bool
+		withPatternProps, ok = an.spec.Components.Schemas["withPatternProperties"]
+		assert.True(t, ok)
+	}
+	_ = withPatternProps
 
-	_, ok = an.allSchemas["#/definitions/withPatternProperties/patternProperties/^prop[0-9]+$"]
+	_, ok := an.allSchemas["#/components/schemas/withPatternProperties/patternProperties/^prop[0-9]+$"]
 	assert.True(t, ok)
 }
 

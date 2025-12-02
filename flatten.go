@@ -19,7 +19,7 @@ import (
 	"github.com/go-openapi/spec"
 )
 
-const definitionsPath = "#/definitions"
+const definitionsPath = "#/components/schemas"
 
 // newRef stores information about refs created during the flattening process
 type newRef struct {

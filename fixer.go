@@ -13,9 +13,11 @@ import "github.com/go-openapi/spec"
 // due to zero values being omitted upon re-serializing (omitempty) we
 // lose them unless we stick some chars in there.
 func FixEmptyResponseDescriptions(s *spec.Swagger) {
-	for k, v := range s.Responses {
-		FixEmptyDesc(&v) //#nosec
-		s.Responses[k] = v
+	if s.Components != nil {
+		for k, v := range s.Components.Responses {
+			FixEmptyDesc(&v) //#nosec
+			s.Components.Responses[k] = v
+		}
 	}
 
 	if s.Paths == nil {

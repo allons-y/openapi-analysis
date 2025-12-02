@@ -74,10 +74,11 @@ func TestFlatten_ImportExternalReferences(t *testing.T) {
 	_, erx := importExternalReferences(opts)
 	require.NoError(t, erx)
 
-	require.Len(t, sp.Definitions, 11)
-	require.Contains(t, sp.Definitions, "tag")
-	require.Contains(t, sp.Definitions, "named")
-	require.Contains(t, sp.Definitions, "record")
+	require.NotNil(t, sp.Components)
+	require.Len(t, sp.Components.Schemas, 11)
+	require.Contains(t, sp.Components.Schemas, "tag")
+	require.Contains(t, sp.Components.Schemas, "named")
+	require.Contains(t, sp.Components.Schemas, "record")
 
 	for idx, toPin := range makeRefFixtures() {
 		i := idx
@@ -433,8 +434,8 @@ func TestFlatten_FullWithOAIGen(t *testing.T) {
 	res = getDefinition(t, sp, "bB")
 	assert.JSONEqf(t, `{"type": "string", "format": "date-time"}`, res, "Expected a simple schema for response")
 
-	_, ok := sp.Definitions["bItems"]
-	assert.Falsef(t, ok, "Did not expect a definition for %s", "bItems")
+	_, ok := sp.Components.Schemas["bItems"]
+	assert.Falsef(t, ok, "Did not expect a schema for %s", "bItems")
 
 	res = getDefinition(t, sp, "d")
 	assert.JSONEqf(t, `
@@ -631,8 +632,8 @@ func TestFlatten_MinimalWithOAIGen(t *testing.T) {
 	res = getDefinition(t, sp, "bB")
 	assert.JSONEqf(t, `{"type": "string", "format": "date-time"}`, res, "Expected a simple schema for response")
 
-	_, ok := sp.Definitions["bItems"]
-	assert.Falsef(t, ok, "Did not expect a definition for %s", "bItems")
+	_, ok := sp.Components.Schemas["bItems"]
+	assert.Falsef(t, ok, "Did not expect a schema for %s", "bItems")
 
 	res = getDefinition(t, sp, "d")
 	assert.JSONEqf(t, `{
@@ -729,8 +730,10 @@ func assertNoOAIGen(t *testing.T, bp string, sp *spec.Swagger) (success bool) {
 	msg := logCapture.String()
 	assert.NotContains(t, msg, "warning")
 
-	for k := range sp.Definitions {
-		require.NotContains(t, k, "OAIGen")
+	if sp.Components != nil {
+		for k := range sp.Components.Schemas {
+			require.NotContains(t, k, "OAIGen")
+		}
 	}
 
 	return
@@ -809,8 +812,10 @@ func TestRemoveUnused(t *testing.T) {
 
 	require.NoError(t, Flatten(FlattenOpts{Spec: New(sp), BasePath: bp, Verbose: false, Minimal: true, RemoveUnused: true}))
 
-	assert.Nil(t, sp.Parameters)
-	assert.Nil(t, sp.Responses)
+	if sp.Components != nil {
+		assert.Empty(t, sp.Components.Parameters)
+		assert.Empty(t, sp.Components.Responses)
+	}
 
 	bp = filepath.Join("fixtures", "parameters", "fixture-parameters.yaml")
 	sp = antest.LoadOrFail(t, bp)
@@ -818,8 +823,10 @@ func TestRemoveUnused(t *testing.T) {
 
 	require.NoError(t, Flatten(FlattenOpts{Spec: an, BasePath: bp, Verbose: false, Minimal: true, RemoveUnused: true}))
 
-	assert.Nil(t, sp.Parameters)
-	assert.Nil(t, sp.Responses)
+	if sp.Components != nil {
+		assert.Empty(t, sp.Components.Parameters)
+		assert.Empty(t, sp.Components.Responses)
+	}
 
 	op, ok := an.OperationFor("GET", "/some/where")
 	assert.True(t, ok)
@@ -831,18 +838,22 @@ func TestRemoveUnused(t *testing.T) {
 	assert.Lenf(t, op.Parameters, 1, "Expected 1 parameter expanded for this operation")
 	assert.Lenf(t, an.ParamsFor("PATCH", "/some/remote"), 2, "Expected 2 parameters (with default) expanded for this operation")
 
-	_, ok = sp.Definitions["unused"]
-	assert.False(t, ok, "Did not expect to find #/definitions/unused")
+	if sp.Components != nil {
+		_, ok = sp.Components.Schemas["unused"]
+		assert.False(t, ok, "Did not expect to find #/components/schemas/unused")
+	}
 
 	bp = filepath.Join("fixtures", "parameters", "fixture-parameters.yaml")
 	sp = antest.LoadOrFail(t, bp)
 
 	require.NoError(t, Flatten(FlattenOpts{Spec: New(sp), BasePath: bp, Verbose: true, Minimal: false, RemoveUnused: true}))
 
-	assert.Nil(t, sp.Parameters)
-	assert.Nil(t, sp.Responses)
-	_, ok = sp.Definitions["unused"]
-	assert.Falsef(t, ok, "Did not expect to find #/definitions/unused")
+	if sp.Components != nil {
+		assert.Empty(t, sp.Components.Parameters)
+		assert.Empty(t, sp.Components.Responses)
+		_, ok = sp.Components.Schemas["unused"]
+		assert.Falsef(t, ok, "Did not expect to find #/components/schemas/unused")
+	}
 }
 
 func TestOperationIDs(t *testing.T) {
@@ -976,10 +987,11 @@ func TestFlatten_Bitbucket(t *testing.T) {
 	an = New(sp)
 	require.NoError(t, Flatten(FlattenOpts{Spec: an, BasePath: bp, Verbose: true, Expand: true, RemoveUnused: true}))
 
-	assert.Len(t, sp.Definitions, 2) // only 2 remaining refs after expansion: circular $ref
-	_, ok := sp.Definitions["base_commit"]
+	require.NotNil(t, sp.Components)
+	assert.Len(t, sp.Components.Schemas, 2) // only 2 remaining refs after expansion: circular $ref
+	_, ok := sp.Components.Schemas["base_commit"]
 	assert.True(t, ok)
-	_, ok = sp.Definitions["repository"]
+	_, ok = sp.Components.Schemas["repository"]
 	assert.True(t, ok)
 }
 
@@ -1174,17 +1186,18 @@ func TestFlatten_1851(t *testing.T) {
 		RemoveUnused: false,
 	}))
 
-	serverDefinition, ok := an.spec.Definitions["server"]
+	require.NotNil(t, an.spec.Components)
+	serverDefinition, ok := an.spec.Components.Schemas["server"]
 	assert.True(t, ok)
 
-	serverStatusDefinition, ok := an.spec.Definitions["serverStatus"]
+	serverStatusDefinition, ok := an.spec.Components.Schemas["serverStatus"]
 	assert.True(t, ok)
 
 	serverStatusProperty, ok := serverDefinition.Properties["Status"]
 	assert.True(t, ok)
 
 	jazon := antest.AsJSON(t, serverStatusProperty)
-	assert.JSONEq(t, `{"$ref": "#/definitions/serverStatus"}`, jazon)
+	assert.JSONEq(t, `{"$ref": "#/components/schemas/serverStatus"}`, jazon)
 
 	jazon = antest.AsJSON(t, serverStatusDefinition)
 	assert.JSONEq(t, `{"type": "string", "enum": [ "OK", "Not OK" ]}`, jazon)
@@ -1196,17 +1209,18 @@ func TestFlatten_1851(t *testing.T) {
 	an = New(sp)
 	require.NoError(t, Flatten(FlattenOpts{Spec: an, BasePath: bp, Verbose: true, Minimal: true, RemoveUnused: false}))
 
-	serverDefinition, ok = an.spec.Definitions["Server"]
+	require.NotNil(t, an.spec.Components)
+	serverDefinition, ok = an.spec.Components.Schemas["Server"]
 	assert.True(t, ok)
 
-	serverStatusDefinition, ok = an.spec.Definitions["ServerStatus"]
+	serverStatusDefinition, ok = an.spec.Components.Schemas["ServerStatus"]
 	assert.True(t, ok)
 
 	serverStatusProperty, ok = serverDefinition.Properties["Status"]
 	assert.True(t, ok)
 
 	jazon = antest.AsJSON(t, serverStatusProperty)
-	assert.JSONEq(t, `{"$ref": "#/definitions/ServerStatus"}`, jazon)
+	assert.JSONEq(t, `{"$ref": "#/components/schemas/ServerStatus"}`, jazon)
 
 	jazon = antest.AsJSON(t, serverStatusDefinition)
 	assert.JSONEq(t, `{"type": "string", "enum": [ "OK", "Not OK" ]}`, jazon)
@@ -1364,8 +1378,9 @@ func TestFlatten_1898(t *testing.T) {
 	resp, _, ok := op.SuccessResponse()
 	require.True(t, ok)
 
-	require.Equal(t, "#/definitions/xStreamDefinitionsV2EventMsg", resp.Schema.Ref.String())
-	def, ok := sp.Definitions["xStreamDefinitionsV2EventMsg"]
+	require.Equal(t, "#/components/schemas/xStreamDefinitionsV2EventMsg", resp.Schema.Ref.String())
+	require.NotNil(t, sp.Components)
+	def, ok := sp.Components.Schemas["xStreamDefinitionsV2EventMsg"]
 	require.True(t, ok)
 	require.Len(t, def.Properties, 2)
 	require.Contains(t, def.Properties, "error")
@@ -1386,7 +1401,9 @@ func TestFlatten_RemoveUnused_2657(t *testing.T) {
 		Expand:       false,
 		RemoveUnused: true,
 	}))
-	require.Empty(t, sp.Definitions)
+	if sp.Components != nil {
+		require.Empty(t, sp.Components.Schemas)
+	}
 }
 
 func TestFlatten_Relative_2743(t *testing.T) {
@@ -1419,8 +1436,9 @@ func TestFlatten_Relative_2743(t *testing.T) {
 }
 
 func getDefinition(t testing.TB, sp *spec.Swagger, key string) string {
-	d, ok := sp.Definitions[key]
-	require.Truef(t, ok, "Expected definition for %s", key)
+	require.NotNil(t, sp.Components, "Expected Components to be initialized")
+	d, ok := sp.Components.Schemas[key]
+	require.Truef(t, ok, "Expected schema for %s", key)
 	res, err := json.Marshal(d)
 	if err != nil {
 		panic(err)

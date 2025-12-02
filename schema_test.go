@@ -222,28 +222,29 @@ func TestSchemaAnalys_InvalidSchema(t *testing.T) {
 	sp := antest.LoadOrFail(t, bp)
 
 	// invalid ref not detected (no digging further)
-	def := sp.Definitions["invalidRefInObject"]
+	require.NotNil(t, sp.Components)
+	def := sp.Components.Schemas["invalidRefInObject"]
 	_, err := Schema(SchemaOpts{Schema: &def, Root: sp, BasePath: bp})
 	require.NoError(t, err, "did not expect an error here, in spite of the underlying invalid $ref")
 
-	def = sp.Definitions["invalidRefInTuple"]
+	def = sp.Components.Schemas["invalidRefInTuple"]
 	_, err = Schema(SchemaOpts{Schema: &def, Root: sp, BasePath: bp})
 	require.NoError(t, err, "did not expect an error here, in spite of the underlying invalid $ref")
 
 	// invalid ref detected (digging)
-	schema := refSchema(spec.MustCreateRef("#/definitions/noWhere"))
+	schema := refSchema(spec.MustCreateRef("#/components/schemas/noWhere"))
 	_, err = Schema(SchemaOpts{Schema: schema, Root: sp, BasePath: bp})
 	require.Error(t, err, "expected an error here")
 
-	def = sp.Definitions["invalidRefInMap"]
+	def = sp.Components.Schemas["invalidRefInMap"]
 	_, err = Schema(SchemaOpts{Schema: &def, Root: sp, BasePath: bp})
 	require.Error(t, err, "expected an error here")
 
-	def = sp.Definitions["invalidRefInArray"]
+	def = sp.Components.Schemas["invalidRefInArray"]
 	_, err = Schema(SchemaOpts{Schema: &def, Root: sp, BasePath: bp})
 	require.Error(t, err, "expected an error here")
 
-	def = sp.Definitions["indirectToInvalidRef"]
+	def = sp.Components.Schemas["indirectToInvalidRef"]
 	_, err = Schema(SchemaOpts{Schema: &def, Root: sp, BasePath: bp})
 	require.Error(t, err, "expected an error here")
 }
