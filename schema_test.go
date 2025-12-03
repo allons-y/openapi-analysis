@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-openapi/analysis/internal/antest"
-	"github.com/go-openapi/spec"
+	"github.com/allons-y/openapi-analysis/internal/antest"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )

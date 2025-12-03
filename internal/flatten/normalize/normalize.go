@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-openapi/spec"
+	spec "github.com/allons-y/openapi-spec"
 )
 
 // RebaseRef rebases a remote ref relative to a base ref.

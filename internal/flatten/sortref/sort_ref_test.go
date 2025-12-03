@@ -6,7 +6,7 @@ package sortref
 import (
 	"testing"
 
-	_ "github.com/go-openapi/analysis/internal/antest"
+	_ "github.com/allons-y/openapi-analysis/internal/antest"
 	"github.com/go-openapi/testify/v2/assert"
 )
 

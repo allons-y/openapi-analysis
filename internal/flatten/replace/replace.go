@@ -12,9 +12,9 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/go-openapi/analysis/internal/debug"
+	"github.com/allons-y/openapi-analysis/internal/debug"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/jsonpointer"
-	"github.com/go-openapi/spec"
 )
 
 const (

@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/go-openapi/spec"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )

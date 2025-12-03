@@ -6,7 +6,7 @@ package analysis
 import (
 	"os"
 
-	"github.com/go-openapi/analysis/internal/debug"
+	"github.com/allons-y/openapi-analysis/internal/debug"
 )
 
 var debugLog = debug.GetLogger("analysis", os.Getenv("SWAGGER_DEBUG") != "")

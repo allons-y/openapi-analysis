@@ -1,3 +1,5 @@
+github.com/allons-y/openapi-spec v0.0.0-20251204071355-9801a15ee2d2 h1:E5Ldr9oVQXaWf5zcUWaGxGm/TgcDz3a3TvFBL8b78Xo=
+github.com/allons-y/openapi-spec v0.0.0-20251204071355-9801a15ee2d2/go.mod h1:pu2mFL5Wqqg9nORrVArz/w/kCv40BNi95FryZCKHq3Y=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-openapi/errors v0.22.4 h1:oi2K9mHTOb5DPW2Zjdzs/NIvwi2N3fARKaTJLdNabaM=

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/go-openapi/spec"
+	spec "github.com/allons-y/openapi-spec"
 )
 
 // Mixin modifies the primary OpenAPI spec by adding the paths and
@@ -266,7 +266,6 @@ func mergeResponses(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
 
 	return skipped
 }
-
 
 func mergeTags(primary *spec.Swagger, m *spec.Swagger) (skipped []string) {
 	for _, v := range m.Tags {

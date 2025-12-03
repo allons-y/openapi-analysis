@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"strings"
 
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/jsonpointer"
-	"github.com/go-openapi/spec"
 	"github.com/go-openapi/swag/mangling"
 )
 

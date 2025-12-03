@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/go-openapi/analysis/internal/antest"
-	"github.com/go-openapi/analysis/internal/flatten/operations"
-	"github.com/go-openapi/analysis/internal/flatten/sortref"
+	"github.com/allons-y/openapi-analysis/internal/antest"
+	"github.com/allons-y/openapi-analysis/internal/flatten/operations"
+	"github.com/allons-y/openapi-analysis/internal/flatten/sortref"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/jsonpointer"
-	"github.com/go-openapi/spec"
 	"github.com/go-openapi/testify/v2/assert"
 	"github.com/go-openapi/testify/v2/require"
 )

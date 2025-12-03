@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/go-openapi/spec"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/swag/loading"
 	"github.com/go-openapi/testify/v2/require"
 )

@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"testing"
 
-	_ "github.com/go-openapi/analysis/internal/antest"
-	"github.com/go-openapi/spec"
+	_ "github.com/allons-y/openapi-analysis/internal/antest"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/testify/v2/assert"
 )
 

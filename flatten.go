@@ -10,13 +10,13 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-openapi/analysis/internal/flatten/normalize"
-	"github.com/go-openapi/analysis/internal/flatten/operations"
-	"github.com/go-openapi/analysis/internal/flatten/replace"
-	"github.com/go-openapi/analysis/internal/flatten/schutils"
-	"github.com/go-openapi/analysis/internal/flatten/sortref"
+	"github.com/allons-y/openapi-analysis/internal/flatten/normalize"
+	"github.com/allons-y/openapi-analysis/internal/flatten/operations"
+	"github.com/allons-y/openapi-analysis/internal/flatten/replace"
+	"github.com/allons-y/openapi-analysis/internal/flatten/schutils"
+	"github.com/allons-y/openapi-analysis/internal/flatten/sortref"
+	spec "github.com/allons-y/openapi-spec"
 	"github.com/go-openapi/jsonpointer"
-	"github.com/go-openapi/spec"
 )
 
 const definitionsPath = "#/components/schemas"

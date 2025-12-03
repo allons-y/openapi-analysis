@@ -1,8 +1,8 @@
-module github.com/go-openapi/analysis
+module github.com/allons-y/openapi-analysis
 
 require (
+	github.com/allons-y/openapi-spec v0.0.0-20251204071355-9801a15ee2d2
 	github.com/go-openapi/jsonpointer v0.22.3
-	github.com/go-openapi/spec v0.22.1
 	github.com/go-openapi/strfmt v0.25.0
 	github.com/go-openapi/swag/jsonutils v0.25.4
 	github.com/go-openapi/swag/loading v0.25.4

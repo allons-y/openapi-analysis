@@ -6,7 +6,7 @@ package analysis
 import (
 	"testing"
 
-	"github.com/go-openapi/analysis/internal/antest"
+	"github.com/allons-y/openapi-analysis/internal/antest"
 	"github.com/go-openapi/testify/v2/require"
 )
 

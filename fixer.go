@@ -3,7 +3,7 @@
 
 package analysis
 
-import "github.com/go-openapi/spec"
+import spec "github.com/allons-y/openapi-spec"
 
 // FixEmptyResponseDescriptions replaces empty ("") response
 // descriptions in the input with "(empty)" to ensure that the
