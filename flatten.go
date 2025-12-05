@@ -19,7 +19,16 @@ import (
 	"github.com/go-openapi/jsonpointer"
 )
 
-const definitionsPath = "#/components/schemas"
+const (
+	definitionsPath   = "#/components/schemas" // OpenAPI 3.x
+	definitionsPathV2 = "#/definitions"        // Swagger 2.0
+)
+
+// isDefinitionsPath returns true if the path is a top-level definitions path
+// (either OpenAPI 3.x #/components/schemas or Swagger 2.0 #/definitions)
+func isDefinitionsPath(p string) bool {
+	return p == definitionsPath || p == definitionsPathV2
+}
 
 // newRef stores information about refs created during the flattening process
 type newRef struct {
@@ -563,7 +572,7 @@ func stripOAIGenForRef(opts *FlattenOpts, k string, r *newRef) (bool, error) {
 			replacingRef := spec.MustCreateRef(pr[0])
 
 			// set complex when replacing ref is an anonymous jsonpointer: further processing may be required
-			replacedWithComplex = replacedWithComplex || path.Dir(replacingRef.String()) != definitionsPath
+			replacedWithComplex = replacedWithComplex || !isDefinitionsPath(path.Dir(replacingRef.String()))
 			debugLog("rewrite parent with ref: %s", replacingRef.String())
 
 			// NOTE: it is possible at this stage to introduce json pointers (to non-definitions places).
@@ -625,7 +634,7 @@ func stripOAIGenForRef(opts *FlattenOpts, k string, r *newRef) (bool, error) {
 		}
 
 		debugLog("re-inlined schema: parent: %s, %t", pr[0], asch.isAnalyzedAsComplex())
-		replacedWithComplex = replacedWithComplex || path.Dir(pr[0]) != definitionsPath && asch.isAnalyzedAsComplex()
+		replacedWithComplex = replacedWithComplex || !isDefinitionsPath(path.Dir(pr[0])) && asch.isAnalyzedAsComplex()
 	}
 
 	return replacedWithComplex, nil
@@ -641,7 +650,7 @@ func namePointers(opts *FlattenOpts) error {
 	refsToReplace := make(map[string]SchemaRef, len(opts.Spec.references.schemas))
 	for k, ref := range opts.Spec.references.allRefs {
 		debugLog("name pointers: %q => %#v", k, ref)
-		if path.Dir(ref.String()) == definitionsPath {
+		if isDefinitionsPath(path.Dir(ref.String())) {
 			// this a ref to a top-level definition: ok
 			continue
 		}
@@ -662,7 +671,7 @@ func namePointers(opts *FlattenOpts) error {
 			Name:     k,            // caller
 			Ref:      replacingRef, // called
 			Schema:   sch,
-			TopLevel: path.Dir(replacingRef.String()) == definitionsPath,
+			TopLevel: isDefinitionsPath(path.Dir(replacingRef.String())),
 		}
 	}
 
@@ -688,7 +697,7 @@ func namePointers(opts *FlattenOpts) error {
 
 		v.Ref = result.Ref
 		v.Schema = result.Schema
-		v.TopLevel = path.Dir(result.Ref.String()) == definitionsPath
+		v.TopLevel = isDefinitionsPath(path.Dir(result.Ref.String()))
 		debugLog("replacing pointer at %s: resolved to: %s", key, v.Ref.String())
 
 		if v.TopLevel {

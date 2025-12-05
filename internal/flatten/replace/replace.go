@@ -18,9 +18,16 @@ import (
 )
 
 const (
-	definitionsPath = "#/definitions"
-	allocMediumMap  = 64
+	definitionsPath   = "#/definitions"        // Swagger 2.0
+	definitionsPathV3 = "#/components/schemas" // OpenAPI 3.x
+	allocMediumMap    = 64
 )
+
+// isDefinitionsPath returns true if the path is a top-level definitions path
+// (either Swagger 2.0 #/definitions or OpenAPI 3.x #/components/schemas)
+func isDefinitionsPath(p string) bool {
+	return p == definitionsPath || p == definitionsPathV3
+}
 
 var debugLog = debug.GetLogger("analysis/flatten/replace", os.Getenv("SWAGGER_DEBUG") != "")
 
@@ -349,7 +356,7 @@ func DeepestRef(sp *spec.Swagger, opts *spec.ExpandOptions, ref spec.Ref) (*Deep
 
 DOWNREF:
 	for currentRef.String() != "" {
-		if path.Dir(currentRef.String()) == definitionsPath {
+		if isDefinitionsPath(path.Dir(currentRef.String())) {
 			// this is a top-level definition: stop here and return this ref
 			return &DeepestRefResult{Ref: currentRef}, nil
 		}

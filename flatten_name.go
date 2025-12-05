@@ -68,7 +68,7 @@ func (isn *InlineSchemaNamer) Name(key string, schema *spec.Schema, aschema *Ana
 				isn.opts.flattenContext.warnings = append(isn.opts.flattenContext.warnings, r.Warnings...)
 			}
 
-			if r.Ref.String() != key && (r.Ref.String() != path.Join(definitionsPath, newName) || path.Dir(v.String()) == definitionsPath) {
+			if r.Ref.String() != key && (r.Ref.String() != path.Join(definitionsPath, newName) || isDefinitionsPath(path.Dir(v.String()))) {
 				continue
 			}
 
